@@ -136,10 +136,13 @@ class SlackService
 
         // Special rich notification for Won / Lost final stages
         if ($stageCode === 'won') {
-            $value = $lead->lead_value ? '$'.number_format($lead->lead_value, 2) : 'N/A';
+            $value    = $lead->lead_value ? '$'.number_format($lead->lead_value, 2) : 'N/A';
+            $closedAt = $lead->closed_at
+                ? ' — Closed: '.(\Carbon\Carbon::parse($lead->closed_at)->format('M j, Y'))
+                : '';
             $this->postMessage(
                 $channel,
-                "🏆 *{$title}* ({$personName}) marked as *Won* — Value: {$value}"
+                "🏆 *{$title}* ({$personName}) marked as *Won* — Value: {$value}{$closedAt}"
             );
 
             return;
