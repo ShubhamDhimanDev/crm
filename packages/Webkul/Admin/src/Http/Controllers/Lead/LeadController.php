@@ -320,6 +320,7 @@ class LeadController extends Controller
         ])->only([
             'closed_at',
             'lost_reason',
+            'lead_value',
             'lead_pipeline_stage_id',
             'entity_type',
         ]);
