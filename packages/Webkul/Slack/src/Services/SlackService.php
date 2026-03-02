@@ -149,10 +149,13 @@ class SlackService
         }
 
         if ($stageCode === 'lost') {
-            $reason = ! empty($lead->lost_reason) ? " — Reason: {$lead->lost_reason}" : '';
+            $reason   = ! empty($lead->lost_reason) ? " — Reason: {$lead->lost_reason}" : '';
+            $closedAt = $lead->closed_at
+                ? ' — Closed: '.(\Carbon\Carbon::parse($lead->closed_at)->format('M j, Y'))
+                : '';
             $this->postMessage(
                 $channel,
-                "❌ *{$title}* ({$personName}) marked as *Lost*{$reason}"
+                "❌ *{$title}* ({$personName}) marked as *Lost*{$reason}{$closedAt}"
             );
 
             return;
