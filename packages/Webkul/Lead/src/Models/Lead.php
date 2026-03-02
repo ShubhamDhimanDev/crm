@@ -40,6 +40,26 @@ class Lead extends Model implements LeadContract
         'lead_type_id',
         'lead_pipeline_id',
         'lead_pipeline_stage_id',
+        // A1 — additional fields
+        'priority',
+        'lead_score',
+        'industry',
+        'campaign_name',
+        'ad_name',
+        'form_name',
+        'followup_at',
+        'last_contacted_at',
+        // B9 — Meta Ads fields
+        'meta_ad_id',
+        'meta_adset_id',
+        'meta_campaign_id',
+        'meta_form_id',
+        'meta_page_id',
+        'platform',
+        'source_created_at',
+        // B10 — Google Ads fields
+        'gclid',
+        'ad_group',
     ];
 
     /**
@@ -50,6 +70,11 @@ class Lead extends Model implements LeadContract
     protected $casts = [
         'closed_at'           => 'datetime:D M d, Y H:i A',
         'expected_close_date' => 'date:D M d, Y',
+        // A1 — additional casts
+        'followup_at'         => 'datetime',
+        'last_contacted_at'   => 'datetime',
+        'lead_score'          => 'integer',
+        'source_created_at'   => 'datetime',
     ];
 
     /**

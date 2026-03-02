@@ -84,6 +84,9 @@
                         />
                     @endif
 
+                    @if (config('whatsapp.api_key'))
+                        @include('whatsapp::lead-send-button', ['lead' => $lead])
+                    @endif
                     {!! view_render_event('admin.leads.view.actions.after', ['lead' => $lead]) !!}
                 </div>
             </div>

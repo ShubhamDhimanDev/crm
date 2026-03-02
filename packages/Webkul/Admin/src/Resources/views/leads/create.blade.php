@@ -220,6 +220,126 @@
                             @include('admin::leads.common.products')
                         </div>
                     </div>
+
+                    <!-- Additional Info Section -->
+                    <div
+                        class="flex flex-col gap-4"
+                        id="additional-info"
+                    >
+                        <div class="flex flex-col gap-1">
+                            <p class="text-base font-semibold dark:text-white">
+                                @lang('admin::app.leads.create.additional-info')
+                            </p>
+
+                            <p class="text-gray-600 dark:text-white">
+                                @lang('admin::app.leads.create.additional-info-info')
+                            </p>
+                        </div>
+
+                        <div class="flex gap-4 max-sm:flex-wrap">
+                            <div class="w-full">
+                                <!-- Priority -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.priority')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="select"
+                                        name="priority"
+                                        :label="trans('admin::app.leads.create.priority')"
+                                    >
+                                        <option value="">-- @lang('admin::app.leads.create.select-priority') --</option>
+                                        <option value="hot">@lang('admin::app.leads.create.priority-hot')</option>
+                                        <option value="warm">@lang('admin::app.leads.create.priority-warm')</option>
+                                        <option value="cold">@lang('admin::app.leads.create.priority-cold')</option>
+                                    </x-admin::form.control-group.control>
+                                </x-admin::form.control-group>
+
+                                <!-- Industry -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.industry')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="industry"
+                                        :label="trans('admin::app.leads.create.industry')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Campaign Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.campaign-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="campaign_name"
+                                        :label="trans('admin::app.leads.create.campaign-name')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Ad Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.ad-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="ad_name"
+                                        :label="trans('admin::app.leads.create.ad-name')"
+                                    />
+                                </x-admin::form.control-group>
+                            </div>
+
+                            <div class="w-full">
+                                <!-- Lead Score -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.lead-score')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="lead_score"
+                                        rules="numeric|min_value:0|max_value:100"
+                                        :label="trans('admin::app.leads.create.lead-score')"
+                                    />
+                                    <x-admin::form.control-group.error name="lead_score" />
+                                </x-admin::form.control-group>
+
+                                <!-- Form Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.form-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="form_name"
+                                        :label="trans('admin::app.leads.create.form-name')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Follow-up At -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.create.followup-at')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="date"
+                                        name="followup_at"
+                                        :label="trans('admin::app.leads.create.followup-at')"
+                                    />
+                                </x-admin::form.control-group>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {!! view_render_event('admin.leads.form_controls.after') !!}
@@ -237,7 +357,8 @@
                         tabs: [
                             { id: 'lead-details', label: '@lang('admin::app.leads.create.details')' },
                             { id: 'contact-person', label: '@lang('admin::app.leads.create.contact-person')' },
-                            { id: 'products', label: '@lang('admin::app.leads.create.products')' }
+                            { id: 'products', label: '@lang('admin::app.leads.create.products')' },
+                            { id: 'additional-info', label: '@lang('admin::app.leads.create.additional-info')' }
                         ],
                     };
                 },

@@ -7,15 +7,15 @@
     {!! view_render_event('admin.leads.edit.form_controls.before', ['lead' => $lead]) !!}
 
     <!-- Edit Lead Form -->
-    <x-admin::form         
+    <x-admin::form
         :action="route('admin.leads.update', $lead->id)"
         method="PUT"
     >
         <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
                 <div class="flex flex-col gap-2">
-                    <x-admin::breadcrumbs 
-                        name="leads.edit" 
+                    <x-admin::breadcrumbs
+                        name="leads.edit"
                         :entity="$lead"
                     />
 
@@ -57,7 +57,7 @@
     {!! view_render_event('admin.leads.edit.form_controls.after', ['lead' => $lead]) !!}
 
     @pushOnce('scripts')
-        <script 
+        <script
             type="text/x-template"
             id="v-lead-edit-template"
         >
@@ -87,8 +87,8 @@
                     {!! view_render_event('admin.leads.edit.lead_details.before', ['lead' => $lead]) !!}
 
                     <!-- Details section -->
-                    <div 
-                        class="flex flex-col gap-4" 
+                    <div
+                        class="flex flex-col gap-4"
                         id="lead-details"
                     >
                         <div class="flex flex-col gap-1">
@@ -138,7 +138,7 @@
                                         :entity="$lead"
                                     />
                                 </div>
-                                    
+
                                 <div class="w-full">
                                     <x-admin::attributes
                                         :custom-attributes="app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
@@ -166,8 +166,8 @@
                     {!! view_render_event('admin.leads.edit.contact_person.before', ['lead' => $lead]) !!}
 
                     <!-- Contact Person -->
-                    <div 
-                        class="flex flex-col gap-4" 
+                    <div
+                        class="flex flex-col gap-4"
                         id="contact-person"
                     >
                         <div class="flex flex-col gap-1">
@@ -191,8 +191,8 @@
                     {!! view_render_event('admin.leads.edit.contact_person.products.before', ['lead' => $lead]) !!}
 
                     <!-- Product Section -->
-                    <div 
-                        class="flex flex-col gap-4" 
+                    <div
+                        class="flex flex-col gap-4"
                         id="products"
                     >
                         <div class="flex flex-col gap-1">
@@ -212,8 +212,135 @@
                     </div>
 
                     {!! view_render_event('admin.leads.edit.contact_person.products.after', ['lead' => $lead]) !!}
+
+                    <!-- Additional Info Section -->
+                    <div
+                        class="flex flex-col gap-4"
+                        id="additional-info"
+                    >
+                        <div class="flex flex-col gap-1">
+                            <p class="text-base font-semibold dark:text-white">
+                                @lang('admin::app.leads.edit.additional-info')
+                            </p>
+
+                            <p class="text-gray-600 dark:text-white">
+                                @lang('admin::app.leads.edit.additional-info-info')
+                            </p>
+                        </div>
+
+                        <div class="flex gap-4 max-sm:flex-wrap">
+                            <div class="w-full">
+                                <!-- Priority -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.priority')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="select"
+                                        name="priority"
+                                        :value="$lead->priority"
+                                        :label="trans('admin::app.leads.edit.priority')"
+                                    >
+                                        <option value="">-- @lang('admin::app.leads.edit.select-priority') --</option>
+                                        <option value="hot" {{ $lead->priority === 'hot' ? 'selected' : '' }}>@lang('admin::app.leads.edit.priority-hot')</option>
+                                        <option value="warm" {{ $lead->priority === 'warm' ? 'selected' : '' }}>@lang('admin::app.leads.edit.priority-warm')</option>
+                                        <option value="cold" {{ $lead->priority === 'cold' ? 'selected' : '' }}>@lang('admin::app.leads.edit.priority-cold')</option>
+                                    </x-admin::form.control-group.control>
+                                </x-admin::form.control-group>
+
+                                <!-- Industry -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.industry')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="industry"
+                                        value="{{ $lead->industry }}"
+                                        :label="trans('admin::app.leads.edit.industry')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Campaign Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.campaign-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="campaign_name"
+                                        value="{{ $lead->campaign_name }}"
+                                        :label="trans('admin::app.leads.edit.campaign-name')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Ad Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.ad-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="ad_name"
+                                        value="{{ $lead->ad_name }}"
+                                        :label="trans('admin::app.leads.edit.ad-name')"
+                                    />
+                                </x-admin::form.control-group>
+                            </div>
+
+                            <div class="w-full">
+                                <!-- Lead Score -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.lead-score')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="lead_score"
+                                        value="{{ $lead->lead_score }}"
+                                        rules="numeric|min_value:0|max_value:100"
+                                        :label="trans('admin::app.leads.edit.lead-score')"
+                                    />
+                                    <x-admin::form.control-group.error name="lead_score" />
+                                </x-admin::form.control-group>
+
+                                <!-- Form Name -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.form-name')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="text"
+                                        name="form_name"
+                                        value="{{ $lead->form_name }}"
+                                        :label="trans('admin::app.leads.edit.form-name')"
+                                    />
+                                </x-admin::form.control-group>
+
+                                <!-- Follow-up At -->
+                                <x-admin::form.control-group>
+                                    <x-admin::form.control-group.label>
+                                        @lang('admin::app.leads.edit.followup-at')
+                                    </x-admin::form.control-group.label>
+
+                                    <x-admin::form.control-group.control
+                                        type="date"
+                                        name="followup_at"
+                                        value="{{ $lead->followup_at ? $lead->followup_at->format('Y-m-d') : '' }}"
+                                        :label="trans('admin::app.leads.edit.followup-at')"
+                                    />
+                                </x-admin::form.control-group>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
+
                 {!! view_render_event('admin.leads.form_controls.after') !!}
             </div>
         </script>
@@ -225,17 +352,18 @@
                 data() {
                     return {
                         activeTab: 'lead-details',
-                        
-                        lead:  @json($lead),  
 
-                        person:  @json($lead->person),  
+                        lead:  @json($lead),
+
+                        person:  @json($lead->person),
 
                         products: @json($lead->products),
 
                         tabs: [
                             { id: 'lead-details', label: '@lang('admin::app.leads.edit.details')' },
                             { id: 'contact-person', label: '@lang('admin::app.leads.edit.contact-person')' },
-                            { id: 'products', label: '@lang('admin::app.leads.edit.products')' }
+                            { id: 'products', label: '@lang('admin::app.leads.edit.products')' },
+                            { id: 'additional-info', label: '@lang('admin::app.leads.edit.additional-info')' }
                         ],
                     };
                 },
@@ -243,9 +371,9 @@
                 methods: {
                     /**
                      * Scroll to the section.
-                     * 
+                     *
                      * @param {String} tabId
-                     * 
+                     *
                      * @returns {void}
                      */
                     scrollToSection(tabId) {
@@ -266,5 +394,5 @@
                 scroll-behavior: smooth;
             }
         </style>
-    @endPushOnce    
+    @endPushOnce
 </x-admin::layouts>

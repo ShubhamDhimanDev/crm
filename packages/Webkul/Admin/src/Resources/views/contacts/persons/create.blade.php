@@ -66,6 +66,99 @@
 
                 <v-organization></v-organization>
 
+                <!-- Address & Additional Contact Info -->
+                <div class="mt-4 flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-base font-semibold dark:text-white">
+                            @lang('admin::app.contacts.persons.create.address-section')
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4 max-sm:flex-wrap">
+                        <div class="w-full">
+                            <!-- Alternate Phone -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.phone-alt')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="tel"
+                                    name="phone_alt"
+                                    :label="trans('admin::app.contacts.persons.create.phone-alt')"
+                                />
+                            </x-admin::form.control-group>
+
+                            <!-- Website -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.website')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="website"
+                                    :label="trans('admin::app.contacts.persons.create.website')"
+                                />
+                            </x-admin::form.control-group>
+
+                            <!-- City -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.city')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="city"
+                                    :label="trans('admin::app.contacts.persons.create.city')"
+                                />
+                            </x-admin::form.control-group>
+                        </div>
+
+                        <div class="w-full">
+                            <!-- State -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.state')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="state"
+                                    :label="trans('admin::app.contacts.persons.create.state')"
+                                />
+                            </x-admin::form.control-group>
+
+                            <!-- Country -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.country')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="country"
+                                    :label="trans('admin::app.contacts.persons.create.country')"
+                                />
+                            </x-admin::form.control-group>
+
+                            <!-- Pincode -->
+                            <x-admin::form.control-group>
+                                <x-admin::form.control-group.label>
+                                    @lang('admin::app.contacts.persons.create.pincode')
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="text"
+                                    name="pincode"
+                                    :label="trans('admin::app.contacts.persons.create.pincode')"
+                                />
+                            </x-admin::form.control-group>
+                        </div>
+                    </div>
+                </div>
+
                 {!! view_render_event('admin.persons.create.form_controls.after') !!}
             </div>
         </div>

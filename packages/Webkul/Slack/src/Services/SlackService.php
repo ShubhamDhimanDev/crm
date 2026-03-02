@@ -197,6 +197,51 @@ class SlackService
     }
 
     /**
+     * Open a Slack modal view using a trigger_id from a slash command or block action.
+     *
+     * @see https://api.slack.com/methods/views.open  (A6)
+     */
+    public function openModal(string $triggerId, array $view): array
+    {
+        return $this->call('views.open', [
+            'trigger_id' => $triggerId,
+            'view'       => $view,
+        ]);
+    }
+
+    /**
+     * Send a Direct Message to a Slack user by their Slack user ID.
+     *
+     * Opens (or re-uses) the DM channel via conversations.open, then
+     * posts a message to it. (A8)
+     *
+     * @see https://api.slack.com/methods/conversations.open
+     * @see https://api.slack.com/methods/chat.postMessage
+     */
+    public function sendDm(string $slackUserId, string $text): array
+    {
+        // Open (or retrieve) the DM channel for this user
+        $openResult = $this->call('conversations.open', ['users' => $slackUserId]);
+
+        if (! ($openResult['ok'] ?? false)) {
+            logger()->warning('[Slack] Could not open DM channel.', [
+                'slack_user_id' => $slackUserId,
+                'error'         => $openResult['error'] ?? 'unknown',
+            ]);
+
+            return $openResult;
+        }
+
+        $channelId = $openResult['channel']['id'] ?? null;
+
+        if (! $channelId) {
+            return ['ok' => false, 'error' => 'no_channel_id'];
+        }
+
+        return $this->postMessage($channelId, $text);
+    }
+
+    /**
      * Call a Slack Web API method.
      */
     protected function call(string $method, array $payload): array

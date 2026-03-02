@@ -63,6 +63,21 @@ return [
         'lead_created'       => env('SLACK_NOTIFY_LEAD_CREATED', true),
         'lead_updated'       => env('SLACK_NOTIFY_LEAD_UPDATED', false),
         'lead_stage_changed' => env('SLACK_NOTIFY_LEAD_STAGE_CHANGED', true),
+        // A8 — direct message to assigned user when a lead is assigned
+        'lead_assigned_dm'   => env('SLACK_NOTIFY_LEAD_ASSIGNED_DM', true),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Multi-Channel Support (A7)
+    |--------------------------------------------------------------------------
+    |
+    | When multi_channel_enabled is true, the CRM will also post notifications
+    | to channels stored in the slack_channels database table (in addition to
+    | the default notification_channel above). Each channel has per-type toggles.
+    |
+    */
+
+    'multi_channel_enabled' => env('SLACK_MULTI_CHANNEL_ENABLED', false),
 
 ];

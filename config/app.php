@@ -220,6 +220,9 @@ return [
         Webkul\Warehouse\Providers\WarehouseServiceProvider::class,
         Webkul\WebForm\Providers\WebFormServiceProvider::class,
         Webkul\Slack\Providers\SlackServiceProvider::class,
+        Webkul\MetaAds\Providers\MetaAdsServiceProvider::class,
+        Webkul\GoogleAds\Providers\GoogleAdsServiceProvider::class,
+        Webkul\WhatsApp\Providers\WhatsAppServiceProvider::class,
     ])->toArray(),
 
     /*

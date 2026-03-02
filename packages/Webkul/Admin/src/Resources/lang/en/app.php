@@ -44,6 +44,12 @@ return [
         'import'          => 'Import',
         'event'           => 'Event',
         'campaigns'       => 'Campaigns',
+        // B9/B10/B11 — Integrations
+        'integrations'       => 'Integrations',
+        'integrations-info'  => 'Manage third-party ad & messaging integrations',
+        'meta-ads'           => 'Meta Ads',
+        'google-ads'         => 'Google Ads',
+        'whatsapp'           => 'WhatsApp',
     ],
 
     'users' => [
@@ -143,6 +149,15 @@ return [
                     'call'          => 'Call',
                     'meeting'       => 'Meeting',
                     'lunch'         => 'Lunch',
+                    // A5 — additional activity types
+                    'whatsapp'      => 'WhatsApp',
+                    'ai_call'       => 'AI Call',
+                    'contract'      => 'Contract',
+                    'assignment'    => 'Assignment',
+                    'followup'      => 'Follow-up',
+                    'stage_change'  => 'Stage Change',
+                    'status_change' => 'Status Change',
+                    'file_upload'   => 'File Upload',
                     'save-btn'      => 'Save Activity',
 
                     'participants' => [
@@ -568,6 +583,16 @@ return [
                 'about-person'       => 'About Person',
                 'about-organization' => 'About Organization',
 
+                // A2 — address & extra contact fields
+                'address-section' => 'Address & Contact',
+                'phone-alt'       => 'Alt. Phone',
+                'website'         => 'Website',
+                'city'            => 'City',
+                'state'           => 'State / Province',
+                'country'         => 'Country',
+                'pincode'         => 'Postal Code',
+                'not-set'         => 'Not Set',
+
                 'activities' => [
                     'index' => [
                         'all'          => 'All',
@@ -627,6 +652,15 @@ return [
                             'call'          => 'Call',
                             'meeting'       => 'Meeting',
                             'lunch'         => 'Lunch',
+                            // A5 — additional activity types
+                            'whatsapp'      => 'WhatsApp',
+                            'ai_call'       => 'AI Call',
+                            'contract'      => 'Contract',
+                            'assignment'    => 'Assignment',
+                            'followup'      => 'Follow-up',
+                            'stage_change'  => 'Stage Change',
+                            'status_change' => 'Status Change',
+                            'file_upload'   => 'File Upload',
                             'save-btn'      => 'Save Activity',
                         ],
                     ],
@@ -639,13 +673,31 @@ return [
             ],
 
             'create' => [
-                'title'    => 'Create Person',
-                'save-btn' => 'Save Person',
+                'title'           => 'Create Person',
+                'save-btn'        => 'Save Person',
+
+                // A2 — address & extra contact fields
+                'address-section' => 'Address & Contact',
+                'phone-alt'       => 'Alt. Phone',
+                'website'         => 'Website',
+                'city'            => 'City',
+                'state'           => 'State / Province',
+                'country'         => 'Country',
+                'pincode'         => 'Postal Code',
             ],
 
             'edit' => [
-                'title'    => 'Edit Person',
-                'save-btn' => 'Save Person',
+                'title'           => 'Edit Person',
+                'save-btn'        => 'Save Person',
+
+                // A2 — address & extra contact fields
+                'address-section' => 'Address & Contact',
+                'phone-alt'       => 'Alt. Phone',
+                'website'         => 'Website',
+                'city'            => 'City',
+                'state'           => 'State / Province',
+                'country'         => 'Country',
+                'pincode'         => 'Postal Code',
             ],
         ],
 
@@ -1313,6 +1365,12 @@ return [
                 'add-stage-info'       => 'Add new stage for your Pipeline',
                 'newly-added'          => 'Newly Added',
                 'stage-delete-success' => 'Stage Deleted Successfully',
+                // A3 — stage type & color
+                'stage-type'           => 'Stage Type',
+                'stage-type-open'      => 'Open',
+                'stage-type-won'       => 'Won',
+                'stage-type-lost'      => 'Lost',
+                'stage-color'          => 'Colour',
             ],
 
             'edit'  => [
@@ -1333,6 +1391,12 @@ return [
                 'add-new-stages'       => 'Add New Stages',
                 'add-stage-info'       => 'Add new stage for your Pipeline',
                 'stage-delete-success' => 'Stage Deleted Successfully',
+                // A3 — stage type & color
+                'stage-type'           => 'Stage Type',
+                'stage-type-open'      => 'Open',
+                'stage-type-won'       => 'Won',
+                'stage-type-lost'      => 'Lost',
+                'stage-color'          => 'Colour',
             ],
         ],
 
@@ -1723,6 +1787,64 @@ return [
                 'update-success'    => 'Import updated successfully.',
             ],
         ],
+
+        'integrations' => [
+            'copy'     => 'Copy',
+            'save-btn' => 'Save Settings',
+
+            'meta-ads' => [
+                'title'                  => 'Meta Ads Integration',
+                'webhook-section'        => 'Webhook Configuration',
+                'webhook-info'           => 'Add the callback URL below to your Meta App as a Webhook subscription for the "leadgen" field.',
+                'callback-url'           => 'Callback URL',
+                'setup-steps-title'      => 'Setup Steps',
+                'step1'                  => 'Go to Meta for Developers and create / open your App.',
+                'step2'                  => 'Under Webhooks, subscribe to the Page / Lead Ads leadgen event and paste the callback URL above.',
+                'step3'                  => 'Set the Verify Token to the same value you enter in the form on the right.',
+                'step4'                  => 'Fill in the App ID, App Secret and Pixel ID below, then save.',
+                'config-section'         => 'App Configuration',
+                'app-id'                 => 'App ID',
+                'app-id-placeholder'     => 'Enter your Meta App ID',
+                'app-secret'             => 'App Secret',
+                'app-secret-placeholder' => 'Enter your Meta App Secret',
+                'verify-token'           => 'Verify Token',
+                'verify-token-placeholder' => 'Enter a secret verify token',
+                'verify-token-help'      => 'Choose any secret string. Set the same value in your Meta Webhook subscription.',
+                'pixel-id'               => 'Pixel ID',
+                'pixel-id-placeholder'   => 'Enter your Meta Pixel ID',
+            ],
+
+            'google-ads' => [
+                'title'                       => 'Google Ads Integration',
+                'webhook-section'             => 'Webhook Configuration',
+                'webhook-info'                => 'Use the webhook URL below as the destination when setting up Google Lead Form extensions.',
+                'webhook-url'                 => 'Webhook URL',
+                'setup-steps-title'           => 'Setup Steps',
+                'step1'                       => 'In Google Ads, open your Lead Form asset and go to the Webhook delivery section.',
+                'step2'                       => 'Paste the webhook URL above as the Webhook URL.',
+                'step3'                       => 'Set the Google Key / Webhook Secret to the value you enter in the form on the right.',
+                'step4'                       => 'Save the Lead Form and submit a test lead to verify the connection.',
+                'config-section'              => 'Configuration',
+                'webhook-secret'              => 'Webhook Secret',
+                'webhook-secret-placeholder'  => 'Enter a webhook secret',
+                'webhook-secret-help'         => 'This secret must match the Google Key value set in your Google Ads Lead Form delivery settings.',
+            ],
+
+            'whatsapp' => [
+                'title'                      => 'WhatsApp Integration',
+                'webhook-section'            => 'Webhook Configuration',
+                'webhook-info'               => 'Use the webhook URL below to receive inbound WhatsApp messages into the CRM activity feed.',
+                'webhook-url'                => 'Webhook URL',
+                'providers-title'            => 'Supported Providers',
+                'config-section'             => 'Configuration',
+                'provider'                   => 'Provider',
+                'from-number'                => 'From Number',
+                'api-key'                    => 'API Key / Auth Token',
+                'api-key-placeholder'        => 'Enter your API key or auth token',
+                'verify-token'               => 'Webhook Verify Token',
+                'verify-token-placeholder'   => 'Enter a webhook verify token (Meta provider only)',
+            ],
+        ],
     ],
 
     'activities' => [
@@ -1904,6 +2026,18 @@ return [
         'destroy-success'   => 'Lead deleted successfully.',
         'destroy-failed'    => 'Lead can not be deleted.',
 
+        'view' => [
+            'whatsapp' => [
+                'send-btn'            => 'Send WhatsApp',
+                'modal-title'         => 'Send WhatsApp Message',
+                'phone-label'         => 'Phone Number',
+                'message-label'       => 'Message',
+                'message-placeholder' => 'Type your message…',
+                'cancel-btn'          => 'Cancel',
+                'sending'             => 'Sending…',
+            ],
+        ],
+
         'file' => [
             'data-not-found'         => 'Data not found.',
             'empty-content'          => 'PDF content is empty or could not be extracted.',
@@ -2002,6 +2136,20 @@ return [
             'contact-info'   => 'Information About the Contact Person',
             'products'       => 'Products',
             'products-info'  => 'Information About the Products',
+            // A1 — Additional Info section
+            'additional-info'      => 'Additional Info',
+            'additional-info-info' => 'Priority, industry, campaign tracking and follow-up details',
+            'priority'             => 'Priority',
+            'select-priority'      => 'Select Priority',
+            'priority-hot'         => 'Hot',
+            'priority-warm'        => 'Warm',
+            'priority-cold'        => 'Cold',
+            'industry'             => 'Industry',
+            'campaign-name'        => 'Campaign Name',
+            'ad-name'              => 'Ad Name',
+            'form-name'            => 'Form Name',
+            'followup-at'          => 'Follow-up Date',
+            'lead-score'           => 'Lead Score',
         ],
 
         'edit' => [
@@ -2013,6 +2161,20 @@ return [
             'contact-info'   => 'Information About the Contact Person',
             'products'       => 'Products',
             'products-info'  => 'Information About the Products',
+            // A1 — Additional Info section
+            'additional-info'      => 'Additional Info',
+            'additional-info-info' => 'Priority, industry, campaign tracking and follow-up details',
+            'priority'             => 'Priority',
+            'select-priority'      => 'Select Priority',
+            'priority-hot'         => 'Hot',
+            'priority-warm'        => 'Warm',
+            'priority-cold'        => 'Cold',
+            'industry'             => 'Industry',
+            'campaign-name'        => 'Campaign Name',
+            'ad-name'              => 'Ad Name',
+            'form-name'            => 'Form Name',
+            'followup-at'          => 'Follow-up Date',
+            'lead-score'           => 'Lead Score',
         ],
 
         'common' => [
@@ -2046,6 +2208,22 @@ return [
 
             'attributes' => [
                 'title' => 'About Lead',
+            ],
+
+            'additional-info' => [
+                'title'          => 'Additional Info',
+                'priority'       => 'Priority',
+                'priority-hot'   => 'Hot',
+                'priority-warm'  => 'Warm',
+                'priority-cold'  => 'Cold',
+                'industry'       => 'Industry',
+                'campaign-name'  => 'Campaign Name',
+                'ad-name'        => 'Ad Name',
+                'form-name'      => 'Form Name',
+                'followup-at'    => 'Follow-up At',
+                'lead-score'     => 'Lead Score',
+                'last-contacted' => 'Last Contacted',
+                'not-set'        => 'Not Set',
             ],
 
             'quotes' => [
@@ -2341,6 +2519,11 @@ return [
         'other-settings-info'  => 'Manage all your extra settings in the CRM',
         'tags'                 => 'Tags',
         'tags-info'            => 'Add, edit or delete tags from CRM',
+        'integrations'         => 'Integrations',
+        'integrations-info'    => 'Manage third-party ad & messaging integrations',
+        'meta-ads'             => 'Meta Ads',
+        'google-ads'           => 'Google Ads',
+        'whatsapp'             => 'WhatsApp',
         'my-account'           => 'My Account',
         'sign-out'             => 'Sign Out',
         'back'                 => 'Back',

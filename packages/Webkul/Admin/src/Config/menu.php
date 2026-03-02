@@ -283,6 +283,31 @@ return [
         'route'      => 'admin.settings.tags.index',
         'sort'       => 1,
         'icon-class' => 'icon-settings-tag',
+    ], [
+        'key'        => 'settings.integrations',
+        'name'       => 'admin::app.layouts.integrations',
+        'info'       => 'admin::app.layouts.integrations-info',
+        'route'      => 'admin.settings.integrations.meta-ads',
+        'sort'       => 5,
+        'icon-class' => 'icon-settings',
+    ], [
+        'key'        => 'settings.integrations.meta-ads',
+        'name'       => 'admin::app.layouts.meta-ads',
+        'route'      => 'admin.settings.integrations.meta-ads',
+        'sort'       => 1,
+        'icon-class' => '',
+    ], [
+        'key'        => 'settings.integrations.google-ads',
+        'name'       => 'admin::app.layouts.google-ads',
+        'route'      => 'admin.settings.integrations.google-ads',
+        'sort'       => 2,
+        'icon-class' => '',
+    ], [
+        'key'        => 'settings.integrations.whatsapp',
+        'name'       => 'admin::app.layouts.whatsapp',
+        'route'      => 'admin.settings.integrations.whatsapp',
+        'sort'       => 3,
+        'icon-class' => '',
     ],
 
     /**
