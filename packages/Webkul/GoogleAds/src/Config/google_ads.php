@@ -9,5 +9,7 @@ return [
 
     'webhook_secret' => env('GOOGLE_ADS_WEBHOOK_SECRET', ''),
 
-    'lead_source_name' => 'Google Ads',
+    'lead_source_name' => 'Google',
+
+    'lead_type_name' => 'New Business',
 ];

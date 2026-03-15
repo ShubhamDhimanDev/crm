@@ -23,18 +23,16 @@ class GoogleAdsWebhookController extends Controller
     public function handle(Request $request): Response
     {
         $rawBody = $request->getContent();
-
+        $payload = json_decode($rawBody, true) ?? [];
         // Accept secret from header or query param
         $secret  = $request->header('X-Google-Webhook-Secret')
-            ?? $request->query('google_key', '');
+            ?? $payload['google_key'];
 
         if (! $this->googleAdsService->verifySecret($secret)) {
-            Log::warning('[GoogleAds] Webhook secret mismatch.', ['ip' => $request->ip()]);
+            Log::warning('[GoogleAds] Webhook secret mismatch.', ['ip' => $request->ip(), 'secret_provided' => $payload['google_key']]);
 
             return response('Unauthorized', 401);
         }
-
-        $payload = json_decode($rawBody, true) ?? [];
 
         // Google can send a single lead or an array wrapped in `leads`
         $leads = $payload['leads'] ?? [$payload];

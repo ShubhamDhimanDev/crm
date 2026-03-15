@@ -47,6 +47,7 @@ class GoogleAdsServiceProvider extends ServiceProvider
             $app->make(\Webkul\Lead\Repositories\LeadRepository::class),
             $app->make(\Webkul\Contact\Repositories\PersonRepository::class),
             $app->make(\Webkul\Lead\Repositories\SourceRepository::class),
+            $app->make(\Webkul\Lead\Repositories\TypeRepository::class),
             $app->make(\Webkul\Lead\Repositories\PipelineRepository::class),
         ));
     }
