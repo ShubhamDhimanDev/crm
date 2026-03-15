@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Webkul\Activity\Repositories\ActivityRepository;
 use Webkul\Lead\Repositories\LeadRepository;
 use Webkul\WhatsApp\Http\Controllers\WhatsAppController;
+use Webkul\WhatsApp\Providers\EventServiceProvider;
 use Webkul\WhatsApp\Services\WhatsAppService;
 
 class WhatsAppServiceProvider extends ServiceProvider
@@ -59,5 +60,8 @@ class WhatsAppServiceProvider extends ServiceProvider
             $app->make(ActivityRepository::class),
             $app->make(LeadRepository::class),
         ));
+
+        // Register the lead nurture event listener
+        $this->app->register(EventServiceProvider::class);
     }
 }

@@ -141,5 +141,152 @@
                 </x-admin::form>
             </div>
         </div>
+
+        <!-- Lead Nurture Sequence Section -->
+        <div class="flex flex-col gap-4 lg:flex-row">
+            <!-- Left: Info -->
+            <div class="flex-1 rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+                <h2 class="mb-4 text-base font-semibold dark:text-white">
+                    Lead Nurture Sequence
+                </h2>
+
+                <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                    Automatically send a 3-step follow-up sequence to every new lead via <strong>Email</strong> and <strong>WhatsApp</strong>.
+                </p>
+
+                <div class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+                    <div class="flex items-start gap-3">
+                        <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700 dark:bg-green-900/30 dark:text-green-400">1</span>
+                        <div><strong class="text-gray-800 dark:text-white">Immediately</strong> — Thank-you message</div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">2</span>
+                        <div><strong class="text-gray-800 dark:text-white">1–2 minutes</strong> — Company profile</div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-purple-100 text-xs font-bold text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">3</span>
+                        <div><strong class="text-gray-800 dark:text-white">10–20 minutes</strong> — Custom link / form</div>
+                    </div>
+                </div>
+
+                <div class="mt-6 rounded-md bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300">
+                    <strong>Requires:</strong> <code>QUEUE_CONNECTION=database</code> in <code>.env</code> and a running queue worker (<code>php artisan queue:work</code>).
+                </div>
+            </div>
+
+            <!-- Right: Nurture Config Form -->
+            <div class="flex-1 rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+                <h2 class="mb-4 text-base font-semibold dark:text-white">
+                    Nurture Configuration
+                </h2>
+
+                <x-admin::form
+                    :action="route('admin.settings.integrations.whatsapp.save')"
+                    method="POST"
+                >
+                    <!-- Master toggle -->
+                    <x-admin::form.control-group>
+                        <x-admin::form.control-group.label>
+                            Enable Nurture Sequence
+                        </x-admin::form.control-group.label>
+
+                        <select
+                            name="nurture_enabled"
+                            class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                        >
+                            <option value="true"  {{ config('whatsapp.nurture.enabled') ? 'selected' : '' }}>Enabled</option>
+                            <option value="false" {{ ! config('whatsapp.nurture.enabled') ? 'selected' : '' }}>Disabled</option>
+                        </select>
+                    </x-admin::form.control-group>
+
+                    <!-- Step 1 — Thank-you -->
+                    <div class="mt-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <p class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">Step 1 — Thank-you Message</p>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Enable Step 1</x-admin::form.control-group.label>
+
+                            <select
+                                name="nurture_welcome_enabled"
+                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                            >
+                                <option value="true"  {{ config('whatsapp.nurture.welcome_enabled') ? 'selected' : '' }}>Enabled</option>
+                                <option value="false" {{ ! config('whatsapp.nurture.welcome_enabled') ? 'selected' : '' }}>Disabled</option>
+                            </select>
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Thank-you Message Text</x-admin::form.control-group.label>
+
+                            <textarea
+                                name="nurture_thank_you_text"
+                                rows="3"
+                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                            >{{ config('whatsapp.nurture.thank_you_text') }}</textarea>
+                        </x-admin::form.control-group>
+                    </div>
+
+                    <!-- Step 2 — Company Profile -->
+                    <div class="mt-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <p class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">Step 2 — Company Profile</p>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Enable Step 2</x-admin::form.control-group.label>
+
+                            <select
+                                name="nurture_company_profile_enabled"
+                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                            >
+                                <option value="true"  {{ config('whatsapp.nurture.company_profile_enabled') ? 'selected' : '' }}>Enabled</option>
+                                <option value="false" {{ ! config('whatsapp.nurture.company_profile_enabled') ? 'selected' : '' }}>Disabled</option>
+                            </select>
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Company Profile Content</x-admin::form.control-group.label>
+
+                            <textarea
+                                name="nurture_company_profile_text"
+                                rows="5"
+                                placeholder="Describe your company, what you offer, key highlights..."
+                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                            >{{ config('whatsapp.nurture.company_profile_text') }}</textarea>
+                        </x-admin::form.control-group>
+                    </div>
+
+                    <!-- Step 3 — Custom Link -->
+                    <div class="mt-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <p class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">Step 3 — Custom Link</p>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Enable Step 3</x-admin::form.control-group.label>
+
+                            <select
+                                name="nurture_custom_link_enabled"
+                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                            >
+                                <option value="true"  {{ config('whatsapp.nurture.custom_link_enabled') ? 'selected' : '' }}>Enabled</option>
+                                <option value="false" {{ ! config('whatsapp.nurture.custom_link_enabled') ? 'selected' : '' }}>Disabled</option>
+                            </select>
+                        </x-admin::form.control-group>
+
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>Custom Link URL</x-admin::form.control-group.label>
+
+                            <x-admin::form.control-group.control
+                                type="url"
+                                name="nurture_custom_link_url"
+                                value="{{ config('whatsapp.nurture.custom_link_url') }}"
+                                placeholder="https://your-form-link.com"
+                            />
+                        </x-admin::form.control-group>
+                    </div>
+
+                    <button type="submit" class="primary-button mt-4">
+                        @lang('admin::app.settings.integrations.save-btn')
+                    </button>
+                </x-admin::form>
+            </div>
+        </div>
     </div>
 </x-admin::layouts>

@@ -26,7 +26,7 @@ class WhatsAppService
     }
 
     /**
-     * Send via Meta Cloud API (Graph API v18.0).
+     * Send via Meta Cloud API (Graph API v22.0).
      */
     protected function sendViaMeta(string $to, string $body): array
     {
@@ -46,6 +46,50 @@ class WhatsAppService
 
         if (! $response->successful()) {
             Log::error('[WhatsApp] Meta send failed.', ['response' => $data, 'to' => $to]);
+        }
+
+        return $data ?? [];
+    }
+
+    /**
+     * Send a Meta template message (required outside the 24-hour conversation window).
+     *
+     * @param  string  $to            Recipient in E.164 format
+     * @param  string  $templateName  Approved template name (e.g. "hello_world")
+     * @param  string  $languageCode  BCP-47 language code (e.g. "en_US")
+     * @param  array   $components    Optional template components (header/body/button variables)
+     */
+    public function sendTemplate(string $to, string $templateName, string $languageCode = 'en_US', array $components = []): array
+    {
+        $phoneNumberId = config('whatsapp.from_number');
+        $apiKey        = config('whatsapp.api_key');
+        $baseUrl       = config('whatsapp.api_base_urls.meta');
+
+        $payload = [
+            'messaging_product' => 'whatsapp',
+            'to'                => $to,
+            'type'              => 'template',
+            'template'          => [
+                'name'     => $templateName,
+                'language' => ['code' => $languageCode],
+            ],
+        ];
+
+        if (! empty($components)) {
+            $payload['template']['components'] = $components;
+        }
+
+        $response = Http::withToken($apiKey)
+            ->post("{$baseUrl}/{$phoneNumberId}/messages", $payload);
+
+        $data = $response->json();
+
+        if (! $response->successful()) {
+            Log::error('[WhatsApp] Meta template send failed.', [
+                'response' => $data,
+                'to'       => $to,
+                'template' => $templateName,
+            ]);
         }
 
         return $data ?? [];
@@ -100,6 +144,39 @@ class WhatsAppService
         }
 
         return $data ?? [];
+    }
+
+    /**
+     * Resolve a lead's primary email, phone, and display name.
+     *
+     * Returns an array with keys: email, phone, name.
+     * Values are null when not available.
+     */
+    public function resolveLeadContact(mixed $lead): array
+    {
+        $person = $lead->person;
+
+        $email = null;
+        $phone = null;
+        $name  = $lead->title ?? 'there';
+
+        if ($person) {
+            $name = $person->name ?? $name;
+
+            $emails = $person->emails ?? [];
+            if (is_string($emails)) {
+                $emails = json_decode($emails, true) ?? [];
+            }
+            $email = $emails[0]['value'] ?? null;
+
+            $phones = $person->contact_numbers ?? [];
+            if (is_string($phones)) {
+                $phones = json_decode($phones, true) ?? [];
+            }
+            $phone = $phones[0]['value'] ?? null;
+        }
+
+        return compact('email', 'phone', 'name');
     }
 
     /**
