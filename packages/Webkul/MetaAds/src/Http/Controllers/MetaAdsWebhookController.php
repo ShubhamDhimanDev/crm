@@ -20,18 +20,20 @@ class MetaAdsWebhookController extends Controller
      * Meta sends hub.mode, hub.verify_token, and hub.challenge.
      * We must respond with hub.challenge to confirm ownership.
      */
-    public function verify(Request $request): Response|JsonResponse
+    public function verify(Request $request)
     {
-        Log::info('[MetaAds] Webhook verification request received.', $request->query());
+        Log::info('[MetaAds] Webhook verification request received.', $request->all());
 
-        if (
-            $request->query('hub_mode') === 'subscribe' &&
-            $request->query('hub_verify_token') === config('meta_ads.verify_token')
-        ) {
-            return response($request->query('hub_challenge'), 200);
+        $mode = $request->input('hub_mode');
+        $token = $request->input('hub_verify_token');
+        $challenge = $request->input('hub_challenge');
+
+        if ($mode === 'subscribe' && $token === config('meta_ads.verify_token')) {
+            return response($challenge, 200)
+                ->header('Content-Type', 'text/plain');
         }
 
-        Log::warning('[MetaAds] Webhook verification failed — token mismatch or wrong mode.');
+        Log::warning('[MetaAds] Webhook verification failed.');
 
         return response('Forbidden', 403);
     }
