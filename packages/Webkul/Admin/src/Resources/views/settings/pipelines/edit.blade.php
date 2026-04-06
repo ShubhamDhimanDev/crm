@@ -17,7 +17,7 @@
                     {!! view_render_event('admin.settings.pipelines.edit.breadcrumbs.before', ['pipeline' => $pipeline]) !!}
 
                     <!-- Breadcrumbs -->
-                    <x-admin::breadcrumbs 
+                    <x-admin::breadcrumbs
                         name="settings.pipelines.edit"
                         :entity="$pipeline"
                     />
@@ -72,7 +72,7 @@
                 {!! view_render_event('admin.settings.pipelines.edit.form.name.after', ['pipeline' => $pipeline]) !!}
 
                 {!! view_render_event('admin.settings.pipelines.edit.form.rotten_days.before', ['pipeline' => $pipeline]) !!}
-                
+
                 <!-- Pipeline Rotten Days -->
                 <x-admin::form.control-group>
                     <x-admin::form.control-group.label class="required">
@@ -152,16 +152,16 @@
                                     <!-- Stage Title and Action -->
                                     <div class="flex items-center justify-between">
                                         <span class="py-1 font-medium dark:text-gray-300">
-                                            @{{ element.name ? element.name : 'New Added' }} 
+                                            @{{ element.name ? element.name : 'New Added' }}
                                         </span>
 
                                         <i
-                                            v-if="isDragable(element)" 
+                                            v-if="isDragable(element)"
                                             class="icon-move cursor-grab rounded-md p-1 text-2xl transition-all hover:bg-gray-100 dark:hover:bg-gray-950"
                                         >
                                         </i>
                                     </div>
-                                    
+
                                     <!-- Cards input fields -->
                                     <div>
                                         <!-- Hidden Inputs Fields -->
@@ -186,7 +186,7 @@
                                             <x-admin::form.control-group.label class="required">
                                                 @lang('admin::app.settings.pipelines.edit.name')
                                             </x-admin::form.control-group.label>
-                                            
+
                                             <x-admin::form.control-group.control
                                                 type="text"
                                                 ::name="'stages[' + element.id + '][name]'"
@@ -220,19 +220,60 @@
                                         </x-admin::form.control-group>
 
                                         {!! view_render_event('admin.settings.pipelines.edit.form.stages.probability.after', ['pipeline' => $pipeline]) !!}
+
+                                        <!-- Stage Type -->
+                                        <x-admin::form.control-group>
+                                            <x-admin::form.control-group.label>
+                                                @lang('admin::app.settings.pipelines.edit.stage-type')
+                                            </x-admin::form.control-group.label>
+
+                                            <select
+                                                ::name="'stages[' + element.id + '][type]'"
+                                                v-model="element['type']"
+                                                ::disabled="element?.code === 'won' || element?.code === 'lost'"
+                                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                            >
+                                                <option value="open">@lang('admin::app.settings.pipelines.edit.stage-type-open')</option>
+                                                <option value="won">@lang('admin::app.settings.pipelines.edit.stage-type-won')</option>
+                                                <option value="lost">@lang('admin::app.settings.pipelines.edit.stage-type-lost')</option>
+                                            </select>
+                                        </x-admin::form.control-group>
+
+                                        <!-- Stage Color -->
+                                        <x-admin::form.control-group>
+                                            <x-admin::form.control-group.label>
+                                                @lang('admin::app.settings.pipelines.edit.stage-color')
+                                            </x-admin::form.control-group.label>
+
+                                            <div class="flex items-center gap-2">
+                                                <input
+                                                    type="color"
+                                                    ::name="'stages[' + element.id + '][color]'"
+                                                    v-model="element['color']"
+                                                    class="h-9 w-14 cursor-pointer rounded border border-gray-200 bg-white p-1 dark:border-gray-800 dark:bg-gray-900"
+                                                />
+
+                                                <input
+                                                    type="text"
+                                                    v-model="element['color']"
+                                                    placeholder="#3B82F6"
+                                                    class="block flex-1 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                                />
+                                            </div>
+                                        </x-admin::form.control-group>}
                                     </div>
                                 </div>
-                                
+
                                 {!! view_render_event('admin.settings.pipelines.edit.form.stages.remove_button.before', ['pipeline' => $pipeline]) !!}
 
                                 <!-- Remove Stage -->
                                 <div
-                                    class="flex cursor-pointer items-center gap-2 border-t border-gray-200 p-2 text-red-600 dark:border-gray-800" 
+                                    class="flex cursor-pointer items-center gap-2 border-t border-gray-200 p-2 text-red-600 dark:border-gray-800"
                                     @click="remove(element)"
                                     v-if="isDragable(element)"
                                 >
                                     <i class="icon-delete text-2xl"></i>
-                                    
+
                                     @lang('admin::app.settings.pipelines.edit.delete-stage')
                                 </div>
 
@@ -297,6 +338,8 @@
                             'code': '',
                             'name': '',
                             'probability': 100,
+                            'type': 'open',
+                            'color': '',
                         });
                     },
 
@@ -369,7 +412,7 @@
 
                     handleDragging(event) {
                         const draggedElement = event.draggedContext.element;
-                        
+
                         const relatedElement = event.relatedContext.element;
 
                         return this.isDragable(draggedElement) && this.isDragable(relatedElement);

@@ -157,17 +157,17 @@
                                     <!-- Stage Title and Action -->
                                     <div class="flex items-center justify-between">
                                         <span class="py-1 font-medium dark:text-gray-300">
-                                            @{{ element.name ? element.name : '@lang('admin::app.settings.pipelines.create.newly-added')'}} 
+                                            @{{ element.name ? element.name : '@lang('admin::app.settings.pipelines.create.newly-added')'}}
                                         </span>
 
                                         <!-- Drag Icon -->
                                         <i
-                                            v-if="isDragable(element)" 
+                                            v-if="isDragable(element)"
                                             class="icon-move cursor-grab rounded-md p-1 text-2xl transition-all hover:bg-gray-100 dark:hover:bg-gray-950"
                                         >
                                         </i>
                                     </div>
-                                    
+
                                     <!-- Card Body -->
                                     <div>
                                         <input
@@ -184,7 +184,7 @@
                                             <x-admin::form.control-group.label class="required">
                                                 @lang('admin::app.settings.pipelines.create.name')
                                             </x-admin::form.control-group.label>
-                                            
+
                                             <x-admin::form.control-group.control
                                                 type="text"
                                                 ::name="'stages[' + element.id + '][name]'"
@@ -225,18 +225,59 @@
                                         </x-admin::form.control-group>
 
                                         {!! view_render_event('admin.settings.pipelines.create.form.stages.probability.after') !!}
+
+                                        <!-- Stage Type -->
+                                        <x-admin::form.control-group>
+                                            <x-admin::form.control-group.label>
+                                                @lang('admin::app.settings.pipelines.create.stage-type')
+                                            </x-admin::form.control-group.label>
+
+                                            <select
+                                                ::name="'stages[' + element.id + '][type]'"
+                                                v-model="element['type']"
+                                                ::disabled="element?.code === 'won' || element?.code === 'lost'"
+                                                class="block w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                            >
+                                                <option value="open">@lang('admin::app.settings.pipelines.create.stage-type-open')</option>
+                                                <option value="won">@lang('admin::app.settings.pipelines.create.stage-type-won')</option>
+                                                <option value="lost">@lang('admin::app.settings.pipelines.create.stage-type-lost')</option>
+                                            </select>
+                                        </x-admin::form.control-group>
+
+                                        <!-- Stage Color -->
+                                        <x-admin::form.control-group>
+                                            <x-admin::form.control-group.label>
+                                                @lang('admin::app.settings.pipelines.create.stage-color')
+                                            </x-admin::form.control-group.label>
+
+                                            <div class="flex items-center gap-2">
+                                                <input
+                                                    type="color"
+                                                    ::name="'stages[' + element.id + '][color]'"
+                                                    v-model="element['color']"
+                                                    class="h-9 w-14 cursor-pointer rounded border border-gray-200 bg-white p-1 dark:border-gray-800 dark:bg-gray-900"
+                                                />
+
+                                                <input
+                                                    type="text"
+                                                    v-model="element['color']"
+                                                    placeholder="#3B82F6"
+                                                    class="block flex-1 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                                />
+                                            </div>
+                                        </x-admin::form.control-group>}
                                     </div>
                                 </div>
-                                
+
                                 {!! view_render_event('admin.settings.pipelines.create.form.stages.delete_button.before') !!}
 
                                 <div
-                                    class="flex cursor-pointer items-center gap-2 border-t border-gray-200 p-2 text-red-600 dark:border-gray-800" 
-                                    @click="removeStage(element)" 
+                                    class="flex cursor-pointer items-center gap-2 border-t border-gray-200 p-2 text-red-600 dark:border-gray-800"
+                                    @click="removeStage(element)"
                                     v-if="isDragable(element)"
                                 >
                                     <i class="icon-delete text-2xl"></i>
-                                    
+
                                     @lang('admin::app.settings.pipelines.create.delete-stage')
                                 </div>
 
@@ -287,24 +328,32 @@
                     return {
                         stages: [{
                             'id': 'stage_1',
-                            'code': 'new', 
+                            'code': 'new',
                             'name': "@lang('admin::app.settings.pipelines.create.new-stage')",
-                            'probability': 100
+                            'probability': 100,
+                            'type': 'open',
+                            'color': ''
                         }, {
                             'id': 'stage_2',
                             'code': '',
                             'name': '',
-                            'probability': 100
+                            'probability': 100,
+                            'type': 'open',
+                            'color': ''
                         }, {
                             'id': 'stage_99',
                             'code': 'won',
                             'name': "@lang('admin::app.settings.pipelines.create.won-stage')",
-                            'probability': 100
+                            'probability': 100,
+                            'type': 'won',
+                            'color': ''
                         }, {
                             'id': 'stage_100',
                             'code': 'lost',
                             'name': "@lang('admin::app.settings.pipelines.create.lost-stage')",
-                            'probability': 0
+                            'probability': 0,
+                            'type': 'lost',
+                            'color': ''
                         }],
 
                         stageCount: 3,
@@ -332,7 +381,9 @@
                             'id': 'stage_' + this.stageCount++,
                             'code': '',
                             'name': '',
-                            'probability': 100
+                            'probability': 100,
+                            'type': 'open',
+                            'color': ''
                         });
                     },
 
@@ -346,7 +397,7 @@
                                 }
 
                                 this.removeUniqueNameErrors();
-                                
+
                                 this.$emitter.emit('add-flash', { type: 'success', message: "@lang('admin::app.settings.pipelines.create.stage-delete-success')" });
                             }
                         });
@@ -415,7 +466,7 @@
 
                     handleDragging(event) {
                         const draggedElement = event.draggedContext.element;
-                        
+
                         const relatedElement = event.relatedContext.element;
 
                         return this.isDragable(draggedElement) && this.isDragable(relatedElement);

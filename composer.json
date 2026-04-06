@@ -76,7 +76,10 @@
             "Webkul\\Warehouse\\": "packages/Webkul/Warehouse/src",
             "Webkul\\WebForm\\": "packages/Webkul/WebForm/src",
             "Webkul\\Automation\\": "packages/Webkul/Automation/src",
-            "Webkul\\Slack\\": "packages/Webkul/Slack/src"
+            "Webkul\\Slack\\": "packages/Webkul/Slack/src",
+            "Webkul\\MetaAds\\": "packages/Webkul/MetaAds/src",
+            "Webkul\\GoogleAds\\": "packages/Webkul/GoogleAds/src",
+            "Webkul\\WhatsApp\\": "packages/Webkul/WhatsApp/src"
         }
     },
     "autoload-dev": {

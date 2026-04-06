@@ -456,3 +456,27 @@ Breadcrumbs::for('dashboard.account.edit', function (BreadcrumbTrail $trail, $us
     $trail->parent('dashboard');
     $trail->push(trans('admin::app.account.edit.title'), route('admin.user.account.edit', $user->id));
 });
+
+// Settings > Integrations (parent)
+Breadcrumbs::for('settings.integrations', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings');
+    $trail->push(trans('admin::app.layouts.integrations'), route('admin.settings.integrations.meta-ads'));
+});
+
+// Settings > Integrations > Meta Ads
+Breadcrumbs::for('settings.integrations.meta-ads', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings.integrations');
+    $trail->push(trans('admin::app.layouts.meta-ads'), route('admin.settings.integrations.meta-ads'));
+});
+
+// Settings > Integrations > Google Ads
+Breadcrumbs::for('settings.integrations.google-ads', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings.integrations');
+    $trail->push(trans('admin::app.layouts.google-ads'), route('admin.settings.integrations.google-ads'));
+});
+
+// Settings > Integrations > WhatsApp
+Breadcrumbs::for('settings.integrations.whatsapp', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings.integrations');
+    $trail->push(trans('admin::app.layouts.whatsapp'), route('admin.settings.integrations.whatsapp'));
+});

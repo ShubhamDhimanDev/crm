@@ -90,11 +90,21 @@ return [
             ],
 
             'source' => [
-                'direct'   => 'Direct',
-                'email'    => 'Email',
-                'phone'    => 'Phone',
-                'web'      => 'Web',
-                'web-form' => 'Web Form',
+                'direct'        => 'Direct',
+                'email'         => 'Email',
+                'phone'         => 'Phone',
+                'web'           => 'Web',
+                'web-form'      => 'Web Form',
+                // A4 — additional sources
+                'manual-entry'  => 'Manual Entry',
+                'website'       => 'Website',
+                'slack'         => 'Slack',
+                'meta-ads'      => 'Meta Ads',
+                'google-ads'    => 'Google Ads',
+                'referral'      => 'Referral',
+                'cold-call'     => 'Cold Call',
+                'exhibition'    => 'Exhibition',
+                'other'         => 'Other',
             ],
 
             'type' => [

@@ -15,5 +15,10 @@ class VerifyCsrfToken extends Middleware
         'admin/mail/inbound-parse',
         'admin/web-forms/forms/*',
         'slack/webhook',
+        'slack/command/newlead',
+        'slack/interaction',
+        'meta/webhook',
+        'google/leads/webhook',
+        'whatsapp/webhook',
     ];
 }

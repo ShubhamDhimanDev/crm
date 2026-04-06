@@ -37,12 +37,15 @@ class LeadEventListener
      * (e.g. dragging through kanban) only emit ONE notification — the
      * final stage — after a 10-second settling window.
      *
+     * Also sends a DM to the newly assigned user when user_id changes (A8).
+     *
      * @param  \Webkul\Lead\Contracts\Lead  $lead
      */
     public function afterUpdate(mixed $lead): void
     {
         try {
-            $stageChanged = $lead->wasChanged('lead_pipeline_stage_id');
+            $stageChanged      = $lead->wasChanged('lead_pipeline_stage_id');
+            $assignmentChanged = $lead->wasChanged('user_id');
 
             if ($stageChanged) {
                 // Store the latest stage notification in cache for 10 seconds.
@@ -71,10 +74,62 @@ class LeadEventListener
             } else {
                 $this->slackService->postLeadUpdatedNotification($lead);
             }
+
+            // A8 — Direct message to newly assigned user when assignment changes
+            if ($assignmentChanged) {
+                $this->sendAssignmentDm($lead);
+            }
         } catch (\Throwable $e) {
             Log::error('[Slack] Failed to send lead-updated notification', [
                 'lead_id' => $lead->id ?? null,
                 'error'   => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Send a DM to the user a lead was just assigned to (A8).
+     *
+     * Only fires when SLACK_NOTIFY_LEAD_ASSIGNED_DM=true and the user
+     * has a slack_user_id stored on their profile.
+     *
+     * @param  \Webkul\Lead\Contracts\Lead  $lead
+     */
+    protected function sendAssignmentDm(mixed $lead): void
+    {
+        if (! config('slack.notifications.lead_assigned_dm')) {
+            return;
+        }
+
+        $assignedUser = $lead->user;
+
+        if (! $assignedUser) {
+            return;
+        }
+
+        // slack_user_id is added to the users table via migration 2026_03_02_000005
+        $slackUserId = $assignedUser->slack_user_id ?? null;
+
+        if (empty($slackUserId)) {
+            return;
+        }
+
+        $personName = optional($lead->person)->name ?? 'Unknown';
+        $value      = $lead->lead_value ? ' — Value: $'.number_format($lead->lead_value, 2) : '';
+        $stageName  = optional($lead->stage)->name ?? '';
+        $stageText  = $stageName ? " — Stage: {$stageName}" : '';
+
+        $text = "📋 A lead has been assigned to you:\n"
+            . "*{$lead->title}* (Contact: {$personName}{$value}{$stageText})\n"
+            . 'Please review it in the CRM at your earliest convenience.';
+
+        try {
+            $this->slackService->sendDm($slackUserId, $text);
+        } catch (\Throwable $e) {
+            Log::warning('[Slack] Failed to send assignment DM.', [
+                'lead_id'      => $lead->id ?? null,
+                'slack_user'   => $slackUserId,
+                'error'        => $e->getMessage(),
             ]);
         }
     }

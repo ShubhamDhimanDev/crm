@@ -13,8 +13,11 @@ class SlackServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load webhook route
+        // Load webhook and command routes
         $this->loadRoutesFrom(__DIR__.'/../Routes/web.php');
+
+        // Load Slack package migrations (slack_channels, users.slack_user_id, etc.)
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
     }
 
     /**

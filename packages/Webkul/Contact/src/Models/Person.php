@@ -57,6 +57,13 @@ class Person extends Model implements PersonContract
         'user_id',
         'organization_id',
         'unique_id',
+        // A2 — address fields
+        'phone_alt',
+        'website',
+        'city',
+        'state',
+        'country',
+        'pincode',
     ];
 
     /**
