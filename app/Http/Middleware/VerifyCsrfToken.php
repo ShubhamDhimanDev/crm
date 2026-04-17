@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'admin/mail/inbound-parse',
         'admin/web-forms/forms/*',
+        'web-forms/*',
         'slack/webhook',
         'slack/command/newlead',
         'slack/interaction',

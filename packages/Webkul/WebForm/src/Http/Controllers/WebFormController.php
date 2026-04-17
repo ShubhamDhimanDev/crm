@@ -68,6 +68,8 @@ class WebFormController extends Controller
 
             $data = request('leads');
 
+            $utmData = $this->getUtmData();
+
             $data['entity_type'] = 'leads';
 
             $data['person'] = request('persons');
@@ -86,8 +88,30 @@ class WebFormController extends Controller
 
             $data['lead_value'] = request('leads.lead_value') ?: 0;
 
+            if (! empty($utmData['utm_campaign']) && empty($data['campaign_name'])) {
+                $data['campaign_name'] = $utmData['utm_campaign'];
+            }
+
+            if (! empty($utmData['utm_content']) && empty($data['ad_name'])) {
+                $data['ad_name'] = $utmData['utm_content'];
+            }
+
+            if (! empty($utmData['utm_id']) && empty($data['form_name'])) {
+                $data['form_name'] = $utmData['utm_id'];
+            }
+
+            foreach (['utm_source', 'utm_medium', 'utm_campaign', 'utm_id', 'utm_term', 'utm_content'] as $utmField) {
+                if (! empty($utmData[$utmField])) {
+                    $data[$utmField] = $utmData[$utmField];
+                }
+            }
+
             if (! request('leads.lead_source_id')) {
-                $source = $this->sourceRepository->findOneByField('name', 'Web Form');
+                $mappedSourceId = $this->resolveLeadSourceIdFromUtm($utmData['utm_source'] ?? null);
+
+                $source = $mappedSourceId
+                    ? $this->sourceRepository->find($mappedSourceId)
+                    : $this->sourceRepository->findOneByField('name', 'Web Form');
 
                 if (! $source) {
                     $source = $this->sourceRepository->first();
@@ -140,6 +164,111 @@ class WebFormController extends Controller
         }
 
         return view('web_form::settings.web-forms.preview', compact('webForm'));
+    }
+
+    /**
+     * Get normalized UTM params from the request.
+     */
+    private function getUtmData(): array
+    {
+        $utmData = request()->only([
+            'utm_source',
+            'utm_medium',
+            'utm_campaign',
+            'utm_id',
+            'utm_term',
+            'utm_content',
+        ]);
+
+        foreach ($utmData as $key => $value) {
+            $utmData[$key] = is_string($value) ? trim($value) : $value;
+        }
+
+        return $utmData;
+    }
+
+    /**
+     * Resolve lead source id from UTM source using live lead source names.
+     */
+    private function resolveLeadSourceIdFromUtm(?string $utmSource): ?int
+    {
+        if (empty($utmSource)) {
+            return null;
+        }
+
+        $normalized = strtolower(trim($utmSource));
+
+        // Allow direct mapping when utm_source already matches an existing source name.
+        $sourceId = $this->findLeadSourceIdByNames([$utmSource]);
+
+        if ($sourceId) {
+            return $sourceId;
+        }
+
+        if (preg_match('/google|adwords|youtube|gdn|display/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Google Ads']);
+        }
+
+        if (preg_match('/facebook|instagram|meta|\bfb\b|\big\b/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Meta Ads']);
+        }
+
+        if (preg_match('/website|site/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Website', 'Web']);
+        }
+
+        if (preg_match('/\bweb\b/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Web', 'Website']);
+        }
+
+        if (preg_match('/email|newsletter|mailchimp/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Email']);
+        }
+
+        if (preg_match('/slack/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Slack']);
+        }
+
+        if (preg_match('/referral|partner|affiliate/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Referral']);
+        }
+
+        if (preg_match('/phone|call/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Phone', 'Cold Call']);
+        }
+
+        if (preg_match('/manual/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Manual Entry']);
+        }
+
+        if (preg_match('/direct/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Direct']);
+        }
+
+        if (preg_match('/exhibition|expo|event/', $normalized)) {
+            return $this->findLeadSourceIdByNames(['Exhibition']);
+        }
+
+        return $this->findLeadSourceIdByNames(['Other']);
+    }
+
+    /**
+     * Find lead source id by candidate source names.
+     */
+    private function findLeadSourceIdByNames(array $candidateNames): ?int
+    {
+        $sources = $this->sourceRepository->all(['id', 'name'])
+            ->mapWithKeys(fn ($source) => [strtolower(trim($source->name)) => $source->id]);
+
+        foreach ($candidateNames as $name) {
+            $key = strtolower(trim($name));
+
+            if (isset($sources[$key])) {
+                return (int) $sources[$key];
+            }
+        }
+
+        return null;
     }
 
     /**

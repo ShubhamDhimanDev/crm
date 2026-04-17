@@ -232,6 +232,41 @@ class WhatsAppController extends Controller
             ->with('success', 'WhatsApp settings saved.');
     }
 
+    /**
+     * GET /admin/settings/integrations/whatsapp/test-template
+     */
+    public function testTemplatePage()
+    {
+        return view('whatsapp::test-template');
+    }
+
+    /**
+     * POST /admin/settings/integrations/whatsapp/test-template
+     */
+    public function sendTestTemplate(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'phone'         => 'required|string|max:30',
+            'language_code' => 'nullable|string|max:20',
+        ]);
+
+        if (! config('whatsapp.from_number') || ! config('whatsapp.api_key')) {
+            return back()->with('error', 'Please configure WHATSAPP_FROM_NUMBER (Meta Phone Number ID) and WHATSAPP_API_KEY first.');
+        }
+
+        $result = $this->whatsAppService->sendTemplate(
+            $request->phone,
+            'hello_world',
+            $request->input('language_code', 'en_US')
+        );
+
+        $success = ! isset($result['error']);
+
+        return back()
+            ->with($success ? 'success' : 'error', $success ? 'Template sent.' : 'Template send failed.')
+            ->with('result', $result);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
