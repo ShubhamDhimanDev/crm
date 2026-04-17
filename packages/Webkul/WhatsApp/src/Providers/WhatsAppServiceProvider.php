@@ -43,6 +43,17 @@ class WhatsAppServiceProvider extends ServiceProvider
                     'leads/{lead}/whatsapp/send',
                     [WhatsAppController::class, 'send']
                 )->name('admin.leads.whatsapp.send');
+
+                // Test Meta template send (hello_world)
+                Route::get(
+                    'settings/integrations/whatsapp/test-template',
+                    [WhatsAppController::class, 'testTemplatePage']
+                )->name('admin.settings.integrations.whatsapp.test-template');
+
+                Route::post(
+                    'settings/integrations/whatsapp/test-template',
+                    [WhatsAppController::class, 'sendTestTemplate']
+                )->name('admin.settings.integrations.whatsapp.test-template.send');
             });
     }
 

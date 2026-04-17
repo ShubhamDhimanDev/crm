@@ -23,11 +23,11 @@
             >
                 <div class="flex flex-col items-center gap-5">
                     <!-- Logo -->
-                    <img
+                    <!--<img
                         class="w-max"
                         src="{{ vite()->asset('images/logo.svg') }}"
                         alt="{{ config('app.name') }}"
-                    />
+                    />-->
 
                     <h1
                         class="text-2xl font-bold"
@@ -89,6 +89,25 @@
                         this.isStoring = true;
 
                         const formData = new FormData(this.$refs.webForm);
+
+                        const utmParams = new URLSearchParams(window.location.search);
+
+                        const utmFields = [
+                            'utm_source',
+                            'utm_medium',
+                            'utm_campaign',
+                            'utm_id',
+                            'utm_term',
+                            'utm_content',
+                        ];
+
+                        utmFields.forEach((field) => {
+                            const value = utmParams.get(field);
+
+                            if (value) {
+                                formData.set(field, value);
+                            }
+                        });
 
                         let inputNames = Array.from(formData.keys());
 
@@ -154,3 +173,22 @@
         </script>
     @endPushOnce
 </x-web_form::layouts>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.body.style.setProperty("background", "transparent", "important");
+    document.body.style.setProperty("background-color", "transparent", "important");
+
+    const params = new URLSearchParams(window.location.search);
+
+    const utmData = {
+        utm_source: params.get("utm_source"),
+        utm_medium: params.get("utm_medium"),
+        utm_campaign: params.get("utm_campaign"),
+        utm_id: params.get("utm_id"),
+        utm_term: params.get("utm_term"),
+        utm_content: params.get("utm_content"),
+    };
+
+    console.log("UTM Data:", utmData);
+});
+</script>
