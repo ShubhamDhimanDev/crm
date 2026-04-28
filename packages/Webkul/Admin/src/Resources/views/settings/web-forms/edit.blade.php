@@ -457,10 +457,9 @@
                                                         <option value="">None</option>
 
                                                         <option
-                                                            v-for="dependency in addedAttributes"
+                                                            v-for="dependency in getDependencyOptions(element)"
                                                             :key="'dependency-' + dependency.id"
-                                                            :value="String(dependency.attribute?.id ?? '')"
-                                                            v-if="dependency.id !== element.id && dependency.attribute"
+                                                            :value="String(dependency.attribute.id)"
                                                         >
                                                             @{{ dependency.name }}
                                                         </option>
@@ -764,6 +763,17 @@
                 },
 
                 methods: {
+                    /**
+                     * Get valid dependency options for conditional visibility.
+                     */
+                    getDependencyOptions(element) {
+                        return this.addedAttributes.filter((dependency) => {
+                            return dependency.id !== element.id
+                                && dependency.attribute
+                                && dependency.attribute.id;
+                        });
+                    },
+
                     /**
                      * Initialize missing properties on loaded attributes.
                      */
