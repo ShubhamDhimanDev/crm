@@ -459,8 +459,8 @@
                                                         <option
                                                             v-for="dependency in addedAttributes"
                                                             :key="'dependency-' + dependency.id"
-                                                            :value="String(dependency.attribute.id)"
-                                                            v-if="dependency.id !== element.id"
+                                                            :value="String(dependency.attribute?.id ?? '')"
+                                                            v-if="dependency.id !== element.id && dependency.attribute"
                                                         >
                                                             @{{ dependency.name }}
                                                         </option>
@@ -718,6 +718,10 @@
                     }
                 },
 
+                created() {
+                    this.initializeAddedAttributes();
+                },
+
                 watch: {
                     /**
                      * Watch for the createLead value and remove the added attributes if the value is true.
@@ -760,6 +764,23 @@
                 },
 
                 methods: {
+                    /**
+                     * Initialize missing properties on loaded attributes.
+                     */
+                    initializeAddedAttributes() {
+                        this.addedAttributes.forEach((attribute) => {
+                            if (typeof attribute.is_hidden === 'undefined') {
+                                attribute.is_hidden = 0;
+                            }
+                            if (typeof attribute.depends_on_attribute_id === 'undefined') {
+                                attribute.depends_on_attribute_id = '';
+                            }
+                            if (typeof attribute.depends_on_value === 'undefined') {
+                                attribute.depends_on_value = '';
+                            }
+                        });
+                    },
+
                     /**
                      * Copy the value to the clipboard.
                      *
