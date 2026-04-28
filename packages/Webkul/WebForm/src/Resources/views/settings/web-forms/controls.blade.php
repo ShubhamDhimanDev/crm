@@ -1,7 +1,6 @@
 @php
     $webFormAttributes = $webForm->attributes()
         ->with('attribute')
-        ->where('is_hidden', 0)
         ->orderBy('sort_order')
         ->orderBy('id')
         ->get();
@@ -16,6 +15,13 @@
         $validations = $attribute->is_required ? 'required' : '';
     @endphp
 
+    <div
+        class="js-webform-attribute"
+        data-webform-attribute-id="{{ $attribute->attribute_id }}"
+        data-is-hidden="{{ (int) $attribute->is_hidden }}"
+        data-depends-on-attribute-id="{{ $attribute->depends_on_attribute_id }}"
+        data-depends-on-value="{{ $attribute->depends_on_value }}"
+    >
     <x-web_form::form.control-group>
         <x-web_form::form.control-group.label
             :for="$fieldName"
@@ -263,4 +269,5 @@
                 @break
         @endswitch
     </x-web_form::form.control-group>
+    </div>
 @endforeach

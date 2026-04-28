@@ -100,6 +100,12 @@ class WebFormRepository extends Repository
             $attributes[$attributeId]['sort_order'] = (int) ($attributeData['sort_order'] ?? $position);
             $attributes[$attributeId]['is_hidden'] = (int) ($attributeData['is_hidden'] ?? 0);
             $attributes[$attributeId]['is_required'] = (int) ($attributeData['is_required'] ?? 0);
+            $attributes[$attributeId]['depends_on_attribute_id'] = empty($attributeData['depends_on_attribute_id'])
+                ? null
+                : (int) $attributeData['depends_on_attribute_id'];
+            $attributes[$attributeId]['depends_on_value'] = isset($attributeData['depends_on_value'])
+                ? trim((string) $attributeData['depends_on_value'])
+                : null;
 
             $position++;
         }

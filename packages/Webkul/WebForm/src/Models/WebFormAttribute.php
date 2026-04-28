@@ -25,6 +25,8 @@ class WebFormAttribute extends Model implements WebFormAttributeContract
         'placeholder',
         'is_required',
         'is_hidden',
+        'depends_on_attribute_id',
+        'depends_on_value',
         'sort_order',
         'attribute_id',
         'web_form_id',

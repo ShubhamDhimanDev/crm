@@ -84,7 +84,89 @@
                     };
                 },
 
+                mounted() {
+                    this.bindConditionalVisibility();
+                    this.updateConditionalVisibility();
+                },
+
                 methods: {
+                    bindConditionalVisibility() {
+                        this.$refs.webForm?.addEventListener('change', this.updateConditionalVisibility);
+                        this.$refs.webForm?.addEventListener('input', this.updateConditionalVisibility);
+                    },
+
+                    updateConditionalVisibility() {
+                        const wrappers = this.$refs.webForm?.querySelectorAll('.js-webform-attribute') || [];
+
+                        wrappers.forEach((wrapper) => {
+                            const dependsOnAttributeId = wrapper.dataset.dependsOnAttributeId;
+                            const dependsOnValue = (wrapper.dataset.dependsOnValue || '').trim();
+                            const isHiddenByDefault = wrapper.dataset.isHidden === '1';
+
+                            if (! dependsOnAttributeId) {
+                                this.toggleWrapperVisibility(wrapper, ! isHiddenByDefault);
+
+                                return;
+                            }
+
+                            const sourceWrapper = this.$refs.webForm.querySelector(
+                                `.js-webform-attribute[data-webform-attribute-id="${dependsOnAttributeId}"]`
+                            );
+
+                            if (! sourceWrapper) {
+                                this.toggleWrapperVisibility(wrapper, false);
+
+                                return;
+                            }
+
+                            const sourceValues = this.getWrapperFieldValues(sourceWrapper);
+
+                            const shouldShow = dependsOnValue
+                                ? sourceValues.includes(dependsOnValue)
+                                : sourceValues.some(value => value !== '');
+
+                            this.toggleWrapperVisibility(wrapper, shouldShow);
+                        });
+                    },
+
+                    getWrapperFieldValues(wrapper) {
+                        const fields = wrapper.querySelectorAll('select, input:not([type="hidden"]), textarea');
+
+                        const values = [];
+
+                        fields.forEach((field) => {
+                            if (field.tagName === 'SELECT' && field.multiple) {
+                                Array.from(field.selectedOptions).forEach((option) => {
+                                    values.push(String(option.value).trim());
+                                });
+
+                                return;
+                            }
+
+                            if (field.type === 'checkbox' || field.type === 'radio') {
+                                if (field.checked) {
+                                    values.push(String(field.value).trim());
+                                }
+
+                                return;
+                            }
+
+                            values.push(String(field.value ?? '').trim());
+                        });
+
+                        return values;
+                    },
+
+                    toggleWrapperVisibility(wrapper, shouldShow) {
+                        wrapper.style.display = shouldShow ? '' : 'none';
+
+                        const fields = wrapper.querySelectorAll('select, input, textarea');
+
+                        fields.forEach((field) => {
+                            field.disabled = ! shouldShow;
+                        });
+                    },
+
                     create(params, { resetForm, setErrors }) {
                         this.isStoring = true;
 

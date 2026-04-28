@@ -443,6 +443,44 @@
                                             </x-admin::form.control-group>
                                         </x-admin::table.td>
 
+                                        <!-- Conditional Visibility -->
+                                        <x-admin::table.td>
+                                            <x-admin::form.control-group class="!mt-6">
+                                                <div class="mb-2">
+                                                    <label class="mb-1 block text-xs text-gray-600 dark:text-gray-300">Show when field</label>
+
+                                                    <select
+                                                        :name="'attributes[' + element.id + '][depends_on_attribute_id]'"
+                                                        v-model="element.depends_on_attribute_id"
+                                                        class="w-full rounded border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-800 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                                    >
+                                                        <option value="">None</option>
+
+                                                        <option
+                                                            v-for="dependency in addedAttributes"
+                                                            :key="'dependency-' + dependency.id"
+                                                            :value="String(dependency.attribute.id)"
+                                                            v-if="dependency.id !== element.id"
+                                                        >
+                                                            @{{ dependency.name }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div>
+                                                    <label class="mb-1 block text-xs text-gray-600 dark:text-gray-300">Equals value</label>
+
+                                                    <input
+                                                        type="text"
+                                                        :name="'attributes[' + element.id + '][depends_on_value]'"
+                                                        v-model="element.depends_on_value"
+                                                        class="w-full rounded border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-800 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                                                        placeholder="Example: 65"
+                                                    >
+                                                </div>
+                                            </x-admin::form.control-group>
+                                        </x-admin::table.td>
+
                                         <!-- Actions -->
                                         <x-admin::table.td>
                                             <x-admin::form.control-group class="!mt-6">
@@ -768,6 +806,8 @@
                             name: attribute.name,
                             is_required: attribute.is_required,
                             is_hidden: 0,
+                            depends_on_attribute_id: '',
+                            depends_on_value: '',
                             attribute: attribute,
                         });
 
