@@ -430,8 +430,8 @@
                                                         <option
                                                             v-for="dependency in addedAttributes"
                                                             :key="'dependency-' + dependency.id"
-                                                            :value="String(dependency.attribute.id)"
-                                                            v-if="dependency.id !== element.id"
+                                                            :value="String(dependency.attribute?.id ?? '')"
+                                                            v-if="dependency.id !== element.id && dependency.attribute"
                                                         >
                                                             @{{ dependency.name }}
                                                         </option>
