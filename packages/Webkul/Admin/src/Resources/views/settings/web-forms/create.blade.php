@@ -333,6 +333,12 @@
                                                 :value="element['attribute']['id']"
                                                 :name="'attributes[' + element.id + '][attribute_id]'"
                                             />
+
+                                            <input
+                                                type="hidden"
+                                                :name="'attributes[' + element.id + '][sort_order]'"
+                                                :value="index + 1"
+                                            />
                                         </x-admin::table.td>
 
                                         <!-- Attribute Name -->
@@ -411,6 +417,24 @@
                                         <!-- Actions -->
                                         <x-admin::table.td>
                                             <x-admin::form.control-group class="!mt-6">
+                                                <label class="mb-2 inline-flex cursor-pointer items-center gap-2">
+                                                    <input
+                                                        type="hidden"
+                                                        :name="'attributes[' + element.id + '][is_hidden]'"
+                                                        value="0"
+                                                    >
+
+                                                    <input
+                                                        type="checkbox"
+                                                        :name="'attributes[' + element.id + '][is_hidden]'"
+                                                        value="1"
+                                                        class="cursor-pointer"
+                                                        :checked="Boolean(Number(element.is_hidden))"
+                                                    >
+
+                                                    <span class="text-xs text-gray-600 dark:text-gray-300">Hide</span>
+                                                </label>
+
                                                 <i
                                                     class="icon-delete cursor-pointer text-2xl"
                                                     v-if="! ['name', 'emails'].includes(element['attribute']['code'])"
@@ -612,6 +636,7 @@
                             'id': 'attribute_' + this.attributeCount++,
                             'name': attribute.name,
                             'is_required': attribute.is_required,
+                            'is_hidden': 0,
                             'attribute': attribute,
                         });
                     }, this);
@@ -630,6 +655,7 @@
                             id: 'attribute_' + this.attributeCount++,
                             name: attribute.name,
                             is_required: attribute.is_required,
+                            is_hidden: 0,
                             attribute: attribute,
                         });
 

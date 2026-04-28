@@ -42,7 +42,9 @@ class WebFormRepository extends Repository
             'form_id' => Str::random(50),
         ]));
 
-        foreach ($data['attributes'] as $attributeData) {
+        $attributes = $this->normalizeAttributes($data['attributes'] ?? []);
+
+        foreach ($attributes as $attributeData) {
             $this->webFormAttributeRepository->create(array_merge([
                 'web_form_id' => $webForm->id,
             ], $attributeData));
@@ -64,7 +66,9 @@ class WebFormRepository extends Repository
 
         $previousAttributeIds = $webForm->attributes()->pluck('id');
 
-        foreach ($data['attributes'] as $attributeId => $attributeData) {
+        $attributes = $this->normalizeAttributes($data['attributes'] ?? []);
+
+        foreach ($attributes as $attributeId => $attributeData) {
             if (Str::contains($attributeId, 'attribute_')) {
                 $this->webFormAttributeRepository->create(array_merge([
                     'web_form_id' => $webForm->id,
@@ -83,5 +87,23 @@ class WebFormRepository extends Repository
         }
 
         return $webForm;
+    }
+
+    /**
+     * Normalize sortable and toggle fields for each incoming webform attribute.
+     */
+    protected function normalizeAttributes(array $attributes): array
+    {
+        $position = 1;
+
+        foreach ($attributes as $attributeId => $attributeData) {
+            $attributes[$attributeId]['sort_order'] = (int) ($attributeData['sort_order'] ?? $position);
+            $attributes[$attributeId]['is_hidden'] = (int) ($attributeData['is_hidden'] ?? 0);
+            $attributes[$attributeId]['is_required'] = (int) ($attributeData['is_required'] ?? 0);
+
+            $position++;
+        }
+
+        return $attributes;
     }
 }

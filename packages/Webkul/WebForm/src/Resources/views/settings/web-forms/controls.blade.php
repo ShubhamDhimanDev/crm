@@ -1,4 +1,13 @@
-@foreach ($webForm->attributes as $attribute)
+@php
+    $webFormAttributes = $webForm->attributes()
+        ->with('attribute')
+        ->where('is_hidden', 0)
+        ->orderBy('sort_order')
+        ->orderBy('id')
+        ->get();
+@endphp
+
+@foreach ($webFormAttributes as $attribute)
     @php
         $parentAttribute = $attribute->attribute;
 
