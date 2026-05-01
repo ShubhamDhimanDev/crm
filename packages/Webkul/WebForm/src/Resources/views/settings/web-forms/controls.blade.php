@@ -13,6 +13,18 @@
         $fieldName = $parentAttribute->entity_type . '[' . $parentAttribute->code . ']';
 
         $validations = $attribute->is_required ? 'required' : '';
+
+        $isConditional = ! empty($attribute->depends_on_attribute_id);
+
+        $baseRules = $isConditional ? '' : $validations;
+
+        $numericRules = $isConditional ? '' : trim($validations.'|numeric', '|');
+
+        $emailRules = $isConditional ? '' : trim($validations.'|email', '|');
+
+        $phoneRules = $isConditional ? '' : trim($validations.'|phone', '|');
+
+        $contactLabelRules = $isConditional ? '' : 'required';
     @endphp
 
     <div
@@ -37,7 +49,7 @@
                     type="text"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -51,7 +63,7 @@
                     type="text"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations.'|numeric'"
+                    :rules="$numericRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -65,7 +77,7 @@
                     type="email"
                     name="{{ $fieldName }}[0][value]"
                     id="{{ $fieldName }}[0][value]"
-                    rules="{{ $validations }}|email"
+                    rules="{{ $emailRules }}"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -74,7 +86,7 @@
                     type="hidden"
                     name="{{ $fieldName }}[0][label]"
                     id="{{ $fieldName }}[0][label]"
-                    rules="required"
+                    rules="{{ $contactLabelRules }}"
                     value="work"
                 />
 
@@ -114,7 +126,7 @@
                     type="file"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :placeholder="$attribute->placeholder"
                     :label="$attribute->name ?? $parentAttribute->name"
                 />
@@ -128,7 +140,7 @@
                     type="text"
                     name="{{ $fieldName }}[0][value]"
                     id="{{ $fieldName }}[0][value]"
-                    rules="{{ $validations }}|phone"
+                    rules="{{ $phoneRules }}"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -137,7 +149,7 @@
                     type="hidden"
                     name="{{ $fieldName }}[0][label]"
                     id="{{ $fieldName }}[0][label]"
-                    rules="required"
+                    rules="{{ $contactLabelRules }}"
                     value="work"
                 />
 
@@ -150,7 +162,7 @@
                     type="date"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -164,7 +176,7 @@
                     type="datetime"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 />
@@ -185,7 +197,7 @@
                     type="select"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 >
@@ -209,7 +221,7 @@
                     type="select"
                     id="{{ $fieldName }}"
                     name="{{ $fieldName }}[]"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 >
@@ -256,7 +268,7 @@
                     type="select"
                     :name="$fieldName"
                     :id="$fieldName"
-                    :rules="$validations"
+                    :rules="$baseRules"
                     :label="$attribute->name ?? $parentAttribute->name"
                     :placeholder="$attribute->placeholder"
                 >
