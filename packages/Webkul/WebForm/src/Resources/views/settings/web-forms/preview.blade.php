@@ -99,12 +99,6 @@
             : '';
     @endphp
 
-    @if (! empty($scopedCustomCss))
-        <style>
-            {{ $scopedCustomCss }}
-        </style>
-    @endif
-
     <!-- Web Form -->
     <v-web-form>
         <div class="flex h-[100vh] items-center justify-center">
@@ -115,6 +109,12 @@
     </v-web-form>
 
     @pushOnce('scripts')
+        @if (! empty($scopedCustomCss))
+            <style>
+                {{ $scopedCustomCss }}
+            </style>
+        @endif
+
         <script
             type="text/template"
             id="v-web-form-template"
