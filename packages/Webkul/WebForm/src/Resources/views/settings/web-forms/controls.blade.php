@@ -30,6 +30,8 @@
     <div
         class="js-webform-attribute"
         data-webform-attribute-id="{{ $attribute->attribute_id }}"
+        data-is-required="{{ (int) $attribute->is_required }}"
+        data-is-conditional="{{ (int) $isConditional }}"
         data-is-hidden="{{ (int) $attribute->is_hidden }}"
         data-depends-on-attribute-id="{{ $attribute->depends_on_attribute_id }}"
         data-depends-on-value="{{ $attribute->depends_on_value }}"

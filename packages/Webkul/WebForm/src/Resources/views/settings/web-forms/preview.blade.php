@@ -167,8 +167,69 @@
                         });
                     },
 
+                    validateVisibleConditionalRequiredFields(setErrors) {
+                        const wrappers = this.$refs.webForm?.querySelectorAll('.js-webform-attribute') || [];
+
+                        const validationErrors = {};
+
+                        wrappers.forEach((wrapper) => {
+                            const isConditional = wrapper.dataset.isConditional === '1';
+                            const isRequired = wrapper.dataset.isRequired === '1';
+                            const isVisible = wrapper.style.display !== 'none';
+
+                            if (! isConditional || ! isRequired || ! isVisible) {
+                                return;
+                            }
+
+                            const fields = Array.from(wrapper.querySelectorAll('select, input, textarea'))
+                                .filter((field) => field.name)
+                                .filter((field) => field.type !== 'hidden')
+                                .filter((field) => ! field.disabled);
+
+                            if (! fields.length) {
+                                return;
+                            }
+
+                            const isFilled = fields.some((field) => {
+                                if (field.type === 'checkbox' || field.type === 'radio') {
+                                    return field.checked;
+                                }
+
+                                if (field.type === 'file') {
+                                    return Boolean(field.files?.length);
+                                }
+
+                                if (field.tagName === 'SELECT' && field.multiple) {
+                                    return Array.from(field.selectedOptions).some((option) => option.value !== '');
+                                }
+
+                                return String(field.value ?? '').trim() !== '';
+                            });
+
+                            if (isFilled) {
+                                return;
+                            }
+
+                            validationErrors[fields[0].name] = 'This field is required.';
+                        });
+
+                        if (Object.keys(validationErrors).length) {
+                            setErrors(validationErrors);
+
+                            return false;
+                        }
+
+                        return true;
+                    },
+
                     create(params, { resetForm, setErrors }) {
                         this.isStoring = true;
+
+                        if (! this.validateVisibleConditionalRequiredFields(setErrors)) {
+                            this.isStoring = false;
+
+                            return;
+                        }
 
                         const formData = new FormData(this.$refs.webForm);
 
