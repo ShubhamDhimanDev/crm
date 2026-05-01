@@ -28,7 +28,7 @@
     @endphp
 
     <div
-        class="js-webform-attribute"
+        class="js-webform-attribute zyro-webform-field"
         data-webform-attribute-id="{{ $attribute->attribute_id }}"
         data-is-required="{{ (int) $attribute->is_required }}"
         data-is-conditional="{{ (int) $isConditional }}"

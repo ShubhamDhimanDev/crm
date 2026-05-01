@@ -283,6 +283,27 @@
                             </x-admin::form.control-group>
                         </v-color-picker>
 
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>
+                                Custom CSS
+                            </x-admin::form.control-group.label>
+
+                            <x-admin::form.control-group.control
+                                type="textarea"
+                                name="custom_css"
+                                id="custom_css"
+                                :value="old('custom_css') ?? $webForm->custom_css"
+                                label="Custom CSS"
+                                placeholder="Use .zyro-webform-root, .zyro-webform-card, .zyro-webform-title, .zyro-webform-field, .zyro-webform-submit"
+                            />
+
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                CSS is rendered with the form preview/embed. Use the provided classes to match the host website styling quickly.
+                            </p>
+
+                            <x-admin::form.control-group.error control-name="custom_css"/>
+                        </x-admin::form.control-group>
+
                          <!-- Attributes -->
                         <div class="mb-4 flex items-center justify-between gap-4">
                             <div class="flex flex-col gap-1">
