@@ -3,6 +3,108 @@
         {{ strip_tags($webForm->title) }}
     </x-slot>
 
+    @php
+        $scopeSelector = '.zyro-webform-' . $webForm->id;
+
+        $scopeCustomCss = function (string $css, string $scope) use (&$scopeCustomCss): string {
+            $css = trim($css);
+
+            if ($css === '') {
+                return '';
+            }
+
+            $length = strlen($css);
+            $index = 0;
+            $result = '';
+
+            while ($index < $length) {
+                while ($index < $length && ctype_space($css[$index])) {
+                    $index++;
+                }
+
+                if ($index >= $length) {
+                    break;
+                }
+
+                $selectorStart = $index;
+
+                while ($index < $length && $css[$index] !== '{') {
+                    $index++;
+                }
+
+                if ($index >= $length) {
+                    break;
+                }
+
+                $selector = trim(substr($css, $selectorStart, $index - $selectorStart));
+                $index++;
+
+                $depth = 1;
+                $blockStart = $index;
+
+                while ($index < $length && $depth > 0) {
+                    if ($css[$index] === '{') {
+                        $depth++;
+                    } elseif ($css[$index] === '}') {
+                        $depth--;
+                    }
+
+                    $index++;
+                }
+
+                $block = substr($css, $blockStart, $index - $blockStart - 1);
+
+                if ($selector === '') {
+                    continue;
+                }
+
+                if (str_starts_with($selector, '@')) {
+                    if (preg_match('/^@(media|supports|container|layer)\b/i', $selector)) {
+                        $result .= $selector . '{' . $scopeCustomCss($block, $scope) . '}';
+                    } else {
+                        $result .= $selector . '{' . $block . '}';
+                    }
+
+                    continue;
+                }
+
+                $scopedSelectors = collect(explode(',', $selector))
+                    ->map(fn ($part) => trim($part))
+                    ->filter()
+                    ->map(function ($part) use ($scope) {
+                        if (str_starts_with($part, $scope)) {
+                            return $part;
+                        }
+
+                        if (str_starts_with($part, ':root')) {
+                            return preg_replace('/^:root\b/', $scope, $part);
+                        }
+
+                        if (str_starts_with($part, '&')) {
+                            return preg_replace('/^&/', $scope, $part);
+                        }
+
+                        return $scope . ' ' . $part;
+                    })
+                    ->implode(', ');
+
+                $result .= $scopedSelectors . '{' . $block . '}';
+            }
+
+            return $result;
+        };
+
+        $scopedCustomCss = ! empty($webForm->custom_css)
+            ? $scopeCustomCss($webForm->custom_css, $scopeSelector)
+            : '';
+    @endphp
+
+    @if (! empty($scopedCustomCss))
+        <style>
+            {{ $scopedCustomCss }}
+        </style>
+    @endif
+
     <!-- Web Form -->
     <v-web-form>
         <div class="flex h-[100vh] items-center justify-center">
@@ -18,10 +120,10 @@
             id="v-web-form-template"
         >
             <div
-                class="flex h-[100vh] items-center justify-center"
+                class="zyro-webform-root zyro-webform-{{ $webForm->id }} flex h-[100vh] items-center justify-center"
                 style="background-color: {{ $webForm->background_color }}"
             >
-                <div class="flex flex-col items-center gap-5">
+                <div class="zyro-webform-shell flex flex-col items-center gap-5">
                     <!-- Logo -->
                     <!--<img
                         class="w-max"
@@ -30,16 +132,16 @@
                     />-->
 
                     <h1
-                        class="text-2xl font-bold"
+                        class="zyro-webform-title text-2xl font-bold"
                         style="color: {{ $webForm->form_title_color }} !important;"
                     >
                         {{ $webForm->title }}
                     </h1>
 
-                    <p class="mt-2 text-base text-gray-600">{{ $webForm->description }}</p>
+                    <p class="zyro-webform-description mt-2 text-base text-gray-600">{{ $webForm->description }}</p>
 
                     <div
-                        class="box-shadow flex min-w-[300px] flex-col rounded-lg bg-white dark:bg-gray-900"
+                        class="zyro-webform-card box-shadow flex min-w-[300px] flex-col rounded-lg bg-white dark:bg-gray-900"
                         style="background-color: {{ $webForm->form_background_color }}"
                     >
                         {!! view_render_event('web_forms.web_forms.form_controls.before', ['webForm' => $webForm]) !!}
@@ -51,14 +153,15 @@
                             ref="modalForm"
                         >
                             <form
+                                class="zyro-webform-form"
                                 @submit="handleSubmit($event, create)"
                                 ref="webForm"
                             >
                                 @include('web_form::settings.web-forms.controls')
 
-                                <div class="flex justify-center">
+                                <div class="zyro-webform-actions flex justify-center">
                                     <x-web_form::button
-                                        class="primary-button"
+                                        class="primary-button zyro-webform-submit"
                                         :title="$webForm->submit_button_label"
                                         ::loading="isStoring"
                                         ::disabled="isStoring"

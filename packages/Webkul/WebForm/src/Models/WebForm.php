@@ -11,6 +11,7 @@ class WebForm extends Model implements WebFormContract
         'form_id',
         'title',
         'description',
+        'custom_css',
         'submit_button_label',
         'submit_success_action',
         'submit_success_content',
