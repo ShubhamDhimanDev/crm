@@ -776,6 +776,16 @@
                             </select>
                         </template>
 
+                        <template v-if="matchedAction && matchedAction.custom_email">
+                            <input
+                                type="email"
+                                :name="`actions[${index}][extra]`"
+                                v-model="action.extra"
+                                placeholder="Enter recipient email address"
+                                class="flex h-10 w-full rounded-md border px-3 py-2.5 text-sm text-gray-600 transition-all hover:border-gray-400 focus:border-gray-400 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-gray-400 dark:focus:border-gray-400"
+                            />
+                        </template>
+
                         <template
                             v-if="
                                 matchedAction

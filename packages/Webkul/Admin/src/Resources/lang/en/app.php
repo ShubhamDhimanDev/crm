@@ -960,7 +960,8 @@ return [
 
             'helpers' => [
                 'update-related-leads'       => 'Update related leads',
-                'send-email-to-sales-owner'  => 'Send email to sales owner',
+                'send-email-to-sales-owner'       => 'Send email to sales owner',
+                'send-email-to-custom-email'     => 'Send email to custom email',
                 'send-email-to-participants' => 'Send email to participants',
                 'add-webhook'                => 'Add Webhook',
                 'update-lead'                => 'Update Lead',
