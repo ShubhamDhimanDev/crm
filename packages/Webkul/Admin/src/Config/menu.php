@@ -295,19 +295,19 @@ return [
         'name'       => 'admin::app.layouts.meta-ads',
         'route'      => 'admin.settings.integrations.meta-ads',
         'sort'       => 1,
-        'icon-class' => '',
+        'icon-class' => 'icon-dashboard',
     ], [
         'key'        => 'settings.integrations.google-ads',
         'name'       => 'admin::app.layouts.google-ads',
         'route'      => 'admin.settings.integrations.google-ads',
         'sort'       => 2,
-        'icon-class' => '',
+        'icon-class' => 'icon-stats-up',
     ], [
         'key'        => 'settings.integrations.whatsapp',
         'name'       => 'admin::app.layouts.whatsapp',
         'route'      => 'admin.settings.integrations.whatsapp',
         'sort'       => 3,
-        'icon-class' => '',
+        'icon-class' => 'icon-message',
     ],
 
     /**

@@ -380,7 +380,7 @@
                             })
                             .catch(error => {
                                 if (error.response.data.redirect) {
-                                    window.location.href = error.response.data.redirect;
+                                    window.top.location.href = error.response.data.redirect;
 
                                     return;
                                 }
