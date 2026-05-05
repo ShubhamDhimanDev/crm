@@ -100,7 +100,16 @@ abstract class AbstractEntity
      */
     public function replacePlaceholders(mixed $entity, string $content): string
     {
-        foreach ($this->getAttributes($this->entityType, []) as $attribute) {
+        return $this->buildEntityReplacements($this->entityType, $entity, $content);
+    }
+
+    /**
+     * Replace placeholders for a specific entity type and entity instance.
+     * Can be called for related entities (e.g. persons on a lead).
+     */
+    protected function buildEntityReplacements(string $entityType, mixed $entity, string $content): string
+    {
+        foreach ($this->getAttributes($entityType, []) as $attribute) {
             $value = '';
 
             switch ($attribute['type']) {
@@ -202,8 +211,8 @@ abstract class AbstractEntity
             }
 
             $content = strtr($content, [
-                '{%'.$this->entityType.'.'.$attribute['id'].'%}'   => $value,
-                '{% '.$this->entityType.'.'.$attribute['id'].' %}' => $value,
+                '{%'.$entityType.'.'.$attribute['id'].'%}'   => $value,
+                '{% '.$entityType.'.'.$attribute['id'].' %}' => $value,
             ]);
         }
 

@@ -60,6 +60,23 @@ class Lead extends AbstractEntity
     }
 
     /**
+     * Replace placeholders with values.
+     * Also processes {%persons.*%} placeholders from the lead's related person.
+     */
+    public function replacePlaceholders(mixed $entity, string $content): string
+    {
+        // Replace lead attribute placeholders ({%leads.*%})
+        $content = $this->buildEntityReplacements('leads', $entity, $content);
+
+        // Replace person attribute placeholders ({%persons.*%}) from the related contact
+        if (! empty($entity->person)) {
+            $content = $this->buildEntityReplacements('persons', $entity->person, $content);
+        }
+
+        return $content;
+    }
+
+    /**
      * Returns workflow actions.
      */
     public function getActions(): array
@@ -85,6 +102,11 @@ class Lead extends AbstractEntity
                 'id'      => 'send_email_to_sales_owner',
                 'name'    => trans('admin::app.settings.workflows.helpers.send-email-to-sales-owner'),
                 'options' => $emailTemplates,
+            ], [
+                'id'           => 'send_email_to_custom_email',
+                'name'         => trans('admin::app.settings.workflows.helpers.send-email-to-custom-email'),
+                'options'      => $emailTemplates,
+                'custom_email' => true,
             ], [
                 'id'   => 'add_tag',
                 'name' => trans('admin::app.settings.workflows.helpers.add-tag'),
@@ -157,6 +179,24 @@ class Lead extends AbstractEntity
                     try {
                         Mail::queue(new Common([
                             'to'      => $lead->user->email,
+                            'subject' => $this->replacePlaceholders($lead, $emailTemplate->subject),
+                            'body'    => $this->replacePlaceholders($lead, $emailTemplate->content),
+                        ]));
+                    } catch (\Exception $e) {
+                    }
+
+                    break;
+
+                case 'send_email_to_custom_email':
+                    $emailTemplate = $this->emailTemplateRepository->find($action['value']);
+
+                    if (! $emailTemplate || empty($action['extra'])) {
+                        break;
+                    }
+
+                    try {
+                        Mail::queue(new Common([
+                            'to'      => $action['extra'],
                             'subject' => $this->replacePlaceholders($lead, $emailTemplate->subject),
                             'body'    => $this->replacePlaceholders($lead, $emailTemplate->content),
                         ]));
